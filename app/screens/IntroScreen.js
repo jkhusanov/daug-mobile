@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo';
 
 
@@ -28,7 +28,7 @@ export default class App extends React.Component {
     }
     else {
       return (
-        <LinearGradient colors={['#64b3f4', '#c2e59c']} style={styles.container}>
+        <LinearGradient colors={['#2F80ED', '#56CCF2']} style={styles.container}>
           <View style={styles.introContainer}>
             <Image
               source={LOGO}
@@ -38,18 +38,18 @@ export default class App extends React.Component {
             <Text style={styles.logoName}> DAUG </Text>
           </View>
           <View style={styles.buttonContainer}>
-            <TouchableHighlight
+            <TouchableOpacity
               
               onPress={() => this.setState({ screen: 'LoginScreen' })}
             >
             <Text style={styles.button}> Login </Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
 
-            <TouchableHighlight
+            <TouchableOpacity
               onPress={() => this.setState({ screen: 'SignupScreen' })}
             >
             <Text style={styles.button}> Sign Up </Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
           </View>
         </LinearGradient>
       );
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     
   },
   logoName: {
-    fontSize: 20,
+    fontSize: 30,
     color: 'white',
   },
   buttonContainer: {
@@ -85,11 +85,11 @@ const styles = StyleSheet.create({
     height: 90,
     width: '100%',    
     justifyContent: 'space-around',
-    padding: 10,
-    backgroundColor: '#51ADCF',
+    padding: 15,
+    backgroundColor: '#3490DE',
   },
   button: {
-    fontSize: 16,
+    fontSize: 20,
     color: 'white',
   }
 });
