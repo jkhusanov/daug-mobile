@@ -1,15 +1,54 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import { LinearGradient } from 'expo';
 import { Button, Input } from 'react-native-elements';
 import { MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
 
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+      screen: '',
+    };
+  }
+  handleSubmit = () => {
+    const {email, password}  = this.state
+    //Display alert
+    if (email === 'user@email.com' && password === 'daugRN') {
+      Keyboard.dismiss
+      console.log("Correct Phrase Entered")
+      Alert.alert(
+        'Success!',
+        'Email: user@email.com & Password: daugRN',
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        { cancelable: false }
+      )
+    } else {
+      Keyboard.dismiss
+      console.log("Incorrect Email Or Password Entered")
+      Alert.alert(
+        'Invalid',
+        'Try, Email: user@email.com & Password: daugRN', 
+
+        [
+          {text: 'Try Again', onPress: () => console.log('Try Again Pressed')},
+        ],
+        { cancelable: false},
+      )
+    }
+  }
   render() {
+    const { screen, email, password } = this.state;
+    const isLoginNotEmpty = !(email === '' || password === '');
+
     return (
       <LinearGradient colors={['#2F80ED', '#56CCF2']} style={styles.container}>
-        <View style={styles.goBackViewContainer}>
+        {/* <View style={styles.goBackViewContainer}>
           <Button
             icon={
               <SimpleLineIcons
@@ -21,7 +60,7 @@ export default class App extends React.Component {
             text=''
             buttonStyle={styles.backButtonStyling}
           />
-        </View>
+        </View> */}
         <View style={styles.inputViewContainer}>
         <Input
             placeholder='Email'
@@ -31,6 +70,8 @@ export default class App extends React.Component {
             autoCorrect={false}
             keyboardType="email-address"
             returnKeyType="next"
+            value={email}
+            onChangeText={(email) => this.setState({email})}
             containerStyle={styles.inputElementsContainer}
             // If email input is wrong use: shake={true}
             leftIcon={
@@ -40,6 +81,7 @@ export default class App extends React.Component {
                 color='white'
               />
             }
+
           />
           <Input
             placeholder='Password'
@@ -48,6 +90,9 @@ export default class App extends React.Component {
             autoCapitalize="none"
             autoCorrect={false}
             returnKeyType="go"
+            secureTextEntry
+            value={password}
+            onChangeText={(password) => this.setState({password})}
             containerStyle={styles.inputElementsContainer}
             leftIcon={
               <SimpleLineIcons
@@ -69,7 +114,8 @@ export default class App extends React.Component {
             }
             iconRight
             text='Login'
-            buttonStyle={styles.loginButton}
+            onPress={this.handleSubmit}
+            buttonStyle={[styles.loginButton, isLoginNotEmpty && {backgroundColor: '#70D4B4', borderColor: '#0E9577'}]}
           />
           <Button
             icon={
@@ -125,11 +171,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   loginButton: {
-    backgroundColor: "#70D4B4",
+    backgroundColor: "#A5ECD7",
     width: 250,
     height: 45,
     borderColor: "transparent",
-    borderWidth: 0,
+    borderWidth: 1,
     borderRadius: 5,
     marginBottom: 20,
   },
@@ -150,14 +196,14 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 5,
   },
-  goBackViewContainer: {
-    alignSelf: 'flex-start',
-  },
-  backButtonStyling: {
-    width: 70,
-    height: 70,
-    borderColor: "transparent",
-    borderWidth: 0,
-    borderRadius: 20,
-  }
+  // goBackViewContainer: {
+  //   alignSelf: 'flex-start',
+  // },
+  // backButtonStyling: {
+  //   width: 70,
+  //   height: 70,
+  //   borderColor: "transparent",
+  //   borderWidth: 0,
+  //   borderRadius: 20,
+  // }
 });

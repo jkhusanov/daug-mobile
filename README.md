@@ -50,8 +50,8 @@ Social Feed screen is based on **Facebook**.
 
 - [x] Design & build an Intro Screen
   - [ ] :star: **Bonus:** Add [Snap Carousel](https://github.com/archriss/react-native-snap-carousel) with [Lottie animations](https://docs.expo.io/versions/latest/sdk/lottie.html) to Intro Screen
-- [ ] Design & build an Signup Screen
-  - [ ] :star: **Bonus:** Add buttons to sign up with Facebook & Twitter
+- [x] Design & build an Signup Screen
+  - [x] :star: **Bonus:** Add buttons to sign up with Facebook & Twitter
 - [ ] Design & build an Login Screen
   - [ ] :star: **Bonus:** Add buttons to login with Facebook & Twitter
 - [ ] Design & build an Profile Screen
