@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, Keyboard } from 'react-native';
 import { LinearGradient } from 'expo';
-import { Button, Input } from 'react-native-elements';
 import { MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
+import { Button, Input } from 'react-native-elements';
 
 
-export default class App extends React.Component {
+export default class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,7 +22,7 @@ export default class App extends React.Component {
       console.log("Correct Phrase Entered")
       Alert.alert(
         'Success!',
-        'Email: user@email.com & Password: daugRN',
+        'Email: user@email.com' + '\nPassword: daugRN',
         [
           {text: 'OK', onPress: () => console.log('OK Pressed')},
         ],
@@ -32,8 +32,8 @@ export default class App extends React.Component {
       Keyboard.dismiss
       console.log("Incorrect Email Or Password Entered")
       Alert.alert(
-        'Invalid',
-        'Try, Email: user@email.com & Password: daugRN', 
+        'Invalid!',
+        'Try to input:' + '\nEmail: user@email.com' + '\nPassword: daugRN', 
 
         [
           {text: 'Try Again', onPress: () => console.log('Try Again Pressed')},

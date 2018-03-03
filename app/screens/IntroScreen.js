@@ -10,7 +10,7 @@ import SignupScreen from './SignupScreen';
 import LOGO from '../../assets/daug_logo.png';
 
 
-export default class App extends React.Component {
+export default class IntroScreen extends React.Component {
   constructor(props) {
     super(props);
     

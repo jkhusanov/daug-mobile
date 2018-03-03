@@ -52,8 +52,8 @@ Social Feed screen is based on **Facebook**.
   - [ ] :star: **Bonus:** Add [Snap Carousel](https://github.com/archriss/react-native-snap-carousel) with [Lottie animations](https://docs.expo.io/versions/latest/sdk/lottie.html) to Intro Screen
 - [x] Design & build an Signup Screen
   - [x] :star: **Bonus:** Add buttons to sign up with Facebook & Twitter
-- [ ] Design & build an Login Screen
-  - [ ] :star: **Bonus:** Add buttons to login with Facebook & Twitter
+- [x] Design & build an Login Screen
+  - [x] :star: **Bonus:** Add buttons to login with Facebook & Twitter
 - [ ] Design & build an Profile Screen
   - [ ] :star: **Bonus:** Add the Logout button
 - [ ] Design & build an Social Feed Screen with [Mock Data](https://raw.githubusercontent.com/mobilespace/daug-mobile/master/app/utils/constants.js?token=AHejrmtQeRKU4ntCxaYLoNiWDlF-kQdKks5am8vHwA%3D%3D)
