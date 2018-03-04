@@ -134,7 +134,7 @@ export default class SignupScreen extends React.Component {
             iconRight
             text='Sign Up'
             onPress={this.handleSubmit}
-            buttonStyle={[styles.loginButton, isSignupNotEmpty && {backgroundColor: '#70D4B4', borderColor: '#0E9577'}]}
+            buttonStyle={[styles.signupButton, isSignupNotEmpty && {backgroundColor: '#70D4B4', borderColor: '#0E9577'}]}
           />
           <Button
             icon={
@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
-  loginButton: {
+  signupButton: {
     backgroundColor: "#A5ECD7",
     width: 250,
     height: 45,

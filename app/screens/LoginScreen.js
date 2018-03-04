@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo';
 import { MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
 import { Button, Input } from 'react-native-elements';
 
+import SocialFeedScreen from './SocialFeedScreen';
 
 export default class LoginScreen extends React.Component {
   constructor(props) {
@@ -15,7 +16,7 @@ export default class LoginScreen extends React.Component {
     };
   }
   handleSubmit = () => {
-    const {email, password}  = this.state
+    const {screen, email, password}  = this.state
     //Display alert
     if (email === 'user@email.com' && password === 'daugRN') {
       Keyboard.dismiss
@@ -27,7 +28,8 @@ export default class LoginScreen extends React.Component {
           {text: 'OK', onPress: () => console.log('OK Pressed')},
         ],
         { cancelable: false }
-      )
+      );
+      this.setState({ screen: 'SocialFeedScreen' });
     } else {
       Keyboard.dismiss
       console.log("Incorrect Email Or Password Entered")
@@ -45,6 +47,10 @@ export default class LoginScreen extends React.Component {
   render() {
     const { screen, email, password } = this.state;
     const isLoginNotEmpty = !(email === '' || password === '');
+
+    if (screen === 'SocialFeedScreen') {
+      return <SocialFeedScreen />;
+    }
 
     return (
       <LinearGradient colors={['#2F80ED', '#56CCF2']} style={styles.container}>

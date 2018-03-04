@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import LoginScreen from './app/screens/LoginScreen';
 import IntroScreen from './app/screens/IntroScreen';
+import SocialFeedScreen from './app/screens/SocialFeedScreen';
 
 export default class App extends React.Component {
   constructor(props) {
