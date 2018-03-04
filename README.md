@@ -10,7 +10,7 @@ This repo is the mobile app for Daug.
 - They can **upload selfies** or **post their thoughts** for other pets to see.
 - They can also look at **other pets posts** and either **paw** (like) or **scratch** (dislike) it.
 
-### [Demo - Try it on Expo](https://exp.host/@monte9/daug-mobile)
+### [Demo - Try it on Expo](https://exp.host/@jkhusanov/daug-mobile)
 
 ## Getting started
 
@@ -57,7 +57,7 @@ Social Feed screen is based on **Facebook**.
 - [ ] Design & build an Profile Screen
   - [ ] :star: **Bonus:** Add the Logout button
 - [x] Design & build an Social Feed Screen with [Mock Data](https://raw.githubusercontent.com/mobilespace/daug-mobile/c4d4a331564ee490e1162f3733f3023afe3defc3/app/utils/constants.js)
-- [ ] Attach screenshots/gif of screens to `README.MD`
+- [x] Attach screenshots/gif of screens to `README.MD`
 
 ### Screenshots
 
