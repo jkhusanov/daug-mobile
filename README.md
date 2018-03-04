@@ -70,9 +70,9 @@ Social Feed screen is based on **Facebook**.
   <img src="screenshots/LoginSuccess.png" width="250" />
 </div>
 <div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/SignUp.png" width="250" />
-  <img src="screenshots/SignUpInput.png" width="250" />
-  <img src="screenshots/SignUpSuccess.png" width="250" />
+  <img src="screenshots/Signup.png" width="250" />
+  <img src="screenshots/SignupInput.png" width="250" />
+  <img src="screenshots/SignupSuccess.png" width="250" />
 </div>
 <!-- <div style={{display: flex; flex-direction: row}}>
   <img src="screenshots/profile_screen.png" width="250" />
