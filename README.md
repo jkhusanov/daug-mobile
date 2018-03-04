@@ -62,25 +62,25 @@ Social Feed screen is based on **Facebook**.
 ### Screenshots
 
 <div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/intro_screen.png" width="250" />
+  <img src="screenshots/Intro.png" width="250" />
 </div>
 <div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/login_screen_1.png" width="250" />
-  <img src="screenshots/login_screen_2.png" width="250" />
-  <img src="screenshots/login_screen_3.png" width="250" />
+  <img src="screenshots/Login.png" width="250" />
+  <img src="screenshots/LoginInput.png" width="250" />
+  <img src="screenshots/LoginSuccess.png" width="250" />
 </div>
 <div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/signup_screen_1.png" width="250" />
-  <img src="screenshots/signup_screen_2.png" width="250" />
-  <img src="screenshots/signup_screen_3.png" width="250" />
+  <img src="screenshots/SignUp.png" width="250" />
+  <img src="screenshots/SignUpInput.png" width="250" />
+  <img src="screenshots/SignUpSuccess.png" width="250" />
 </div>
 <div style={{display: flex; flex-direction: row}}>
   <img src="screenshots/profile_screen.png" width="250" />
 </div>
 <div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/social_feed_screen_1.png" width="250" />
-  <img src="screenshots/social_feed_screen_2.png" width="250" />
-  <img src="screenshots/social_feed_screen_3.png" width="250" />
+  <img src="screenshots/SocialFeed1.png" width="250" />
+  <img src="screenshots/SocialFeed2.png" width="250" />
+  <img src="screenshots/SocialFeed3.png" width="250" />
 </div>
 
 ## Assignment #2
