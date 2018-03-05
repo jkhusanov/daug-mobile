@@ -7,6 +7,12 @@ import { Button, Input } from 'react-native-elements';
 import SocialFeedScreen from './SocialFeedScreen';
 
 export default class LoginScreen extends React.Component {
+  static navigationOptions = {
+    title: '',
+    headerStyle: { backgroundColor: '#2F80ED', borderBottomWidth: 0, },
+    headerTintColor: 'white',
+    headerTitleStyle: { color: 'white', fontSize: 32 },
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -25,11 +31,11 @@ export default class LoginScreen extends React.Component {
         'Success!',
         'Email: user@email.com' + '\nPassword: daugRN',
         [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
+          {text: 'OK', onPress: () => this.props.navigation.navigate('Home')},
         ],
         { cancelable: false }
       );
-      this.setState({ screen: 'SocialFeedScreen' });
+      
     } else {
       Keyboard.dismiss
       console.log("Incorrect Email Or Password Entered")
@@ -54,19 +60,6 @@ export default class LoginScreen extends React.Component {
 
     return (
       <LinearGradient colors={['#2F80ED', '#56CCF2']} style={styles.container}>
-        {/* <View style={styles.goBackViewContainer}>
-          <Button
-            icon={
-              <SimpleLineIcons
-                name='arrow-left'
-                size={25}
-                color='white'
-              />
-            }
-            text=''
-            buttonStyle={styles.backButtonStyling}
-          />
-        </View> */}
         <View style={styles.inputViewContainer}>
         <Input
             placeholder='Email'
@@ -202,14 +195,4 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 5,
   },
-  // goBackViewContainer: {
-  //   alignSelf: 'flex-start',
-  // },
-  // backButtonStyling: {
-  //   width: 70,
-  //   height: 70,
-  //   borderColor: "transparent",
-  //   borderWidth: 0,
-  //   borderRadius: 20,
-  // }
 });

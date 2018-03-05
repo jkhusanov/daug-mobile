@@ -11,6 +11,9 @@ import LOGO from '../../assets/daug_logo.png';
 
 
 export default class IntroScreen extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
   constructor(props) {
     super(props);
     
@@ -40,13 +43,13 @@ export default class IntroScreen extends React.Component {
           <View style={styles.buttonContainer}>
             <TouchableOpacity
               
-              onPress={() => this.setState({ screen: 'LoginScreen' })}
+              onPress={() => this.props.navigation.navigate('Login')}
             >
             <Text style={styles.button}> Login </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => this.setState({ screen: 'SignupScreen' })}
+              onPress={() => this.props.navigation.navigate('Signup')}
             >
             <Text style={styles.button}> Sign Up </Text>
             </TouchableOpacity>
