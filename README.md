@@ -62,25 +62,25 @@ Social Feed screen is based on **Facebook**.
 ### Screenshots
 
 <div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/Intro.png" width="300" />
+  <img src="screenshots/Intro.png" width="270" />
 </div>
 <div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/Login.png" width="300" />
-  <img src="screenshots/LoginInput.png" width="300" />
-  <img src="screenshots/LoginSuccess.png" width="300" />
+  <img src="screenshots/Login.png" width="270" />
+  <img src="screenshots/LoginInput.png" width="270" />
+  <img src="screenshots/LoginSuccess.png" width="270" />
 </div>
 <div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/Signup.png" width="300" />
-  <img src="screenshots/SignupInput.png" width="300" />
-  <img src="screenshots/SignUpSuccess.png" width="300" />
+  <img src="screenshots/Signup.png" width="270" />
+  <img src="screenshots/SignupInput.png" width="270" />
+  <img src="screenshots/SignUpSuccess.png" width="270" />
 </div>
 <!-- <div style={{display: flex; flex-direction: row}}>
   <img src="screenshots/profile_screen.png" width="250" />
 </div> -->
 <div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/SocialFeed1.png" width="300" />
-  <img src="screenshots/SocialFeed2.png" width="300" />
-  <img src="screenshots/SocialFeed3.png" width="300" />
+  <img src="screenshots/SocialFeed1.png" width="270" />
+  <img src="screenshots/SocialFeed2.png" width="270" />
+  <img src="screenshots/SocialFeed3.png" width="270" />
 </div>
 
 ## Assignment #2
