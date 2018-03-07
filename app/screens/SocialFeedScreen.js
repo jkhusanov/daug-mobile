@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableHighlight, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableHighlight, Image, ScrollView, StatusBar } from 'react-native';
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { Button, Icon } from 'react-native-elements';
 import {SOCIAL_FEED_MOCK_DATA} from '../utils/constants';
@@ -13,6 +13,10 @@ export default class SocialFeedScreen extends React.Component {
   renderMembers(member) {
     return (
       <View>
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="#ecf0f1"
+        />
         <View style={styles.membersRowContainer} key={member}>
           <View style={styles.postInfoTopContainer}>
             <View style={styles.postAuthorAvatarContainer}>

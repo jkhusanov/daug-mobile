@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity,StatusBar } from 'react-native';
 import { LinearGradient } from 'expo';
 
 
@@ -23,40 +23,36 @@ export default class IntroScreen extends React.Component {
   }
   render() {
     const { screen } = this.state
-    if (screen === 'LoginScreen') {
-      return <LoginScreen/>
-    } 
-    else if (screen === 'SignupScreen') {
-      return  <SignupScreen/>
-    }
-    else {
-      return (
-        <LinearGradient colors={['#2F80ED', '#56CCF2']} style={styles.container}>
-          <View style={styles.introContainer}>
-            <Image
-              source={LOGO}
-              style={styles.logo}
-              
-            />
-            <Text style={styles.logoName}> DAUG </Text>
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              
-              onPress={() => this.props.navigation.navigate('Login')}
-            >
-            <Text style={styles.button}> Login </Text>
-            </TouchableOpacity>
+    return (
+      <LinearGradient colors={['#2F80ED', '#56CCF2']} style={styles.container}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="#6a51ae"
+        />
+        <View style={styles.introContainer}>
+          <Image
+            source={LOGO}
+            style={styles.logo}
 
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Signup')}
-            >
+          />
+          <Text style={styles.logoName}> DAUG </Text>
+        </View>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+
+            onPress={() => this.props.navigation.navigate('Login')}
+          >
+            <Text style={styles.button}> Login </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Signup')}
+          >
             <Text style={styles.button}> Sign Up </Text>
-            </TouchableOpacity>
-          </View>
-        </LinearGradient>
-      );
-    }
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+    );
   }
 }
 

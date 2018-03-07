@@ -9,7 +9,7 @@ import SocialFeedScreen from './SocialFeedScreen';
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
     title: '',
-    headerStyle: { backgroundColor: '#2F80ED', borderBottomWidth: 0, },
+    headerStyle: { backgroundColor: '#2F80ED', borderBottomWidth: 0, borderBottomColor: '#2F80ED', elevation: null},
     headerTintColor: 'white',
     headerTitleStyle: { color: 'white', fontSize: 32 },
   };

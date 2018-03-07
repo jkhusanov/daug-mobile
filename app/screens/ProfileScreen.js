@@ -2,19 +2,19 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Button } from 'react-native-elements'
 
-const avatar = require('../../assets/profile/avatar.jpeg');
-const cover = require('../../assets/profile/cover.jpeg');
+import COVER  from '../../assets/profile/cover.jpeg';
+import AVATAR from '../../assets/profile/avatar.jpeg';
+
 export default class ProfileScreen extends React.Component {
   render() {
     return (
-      <ScrollView>
+      <ScrollView style={{backgroundColor: '#fff'}}>
         <View style={styles.mainContainer}>
           <View style={styles.profileHeaderContainer}>
             <View style={styles.profileHeaderCoverContainer}>
               <Image
-                  style={styles.coverImage}
-                  source={cover}
-                  resizeMode='cover'
+                style={styles.coverImage}
+                source={COVER}
               />
             </View>
             <View style={styles.profileInfoContainer}>
@@ -22,8 +22,7 @@ export default class ProfileScreen extends React.Component {
                 <View style={styles.profileAvatarContainer}>
                   <Image
                     style={styles.avatarImage}
-                    source={avatar}
-                    resizeMode='cover'
+                    source={AVATAR}
                   />
                 </View>
                 <View style={styles.profileStatsEditContainer}>
@@ -172,7 +171,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#A5ECD7',
     width: 170,
     height: 40,
-    borderRadius: 10,
+    borderRadius: 0,
   }
 
 });
