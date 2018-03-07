@@ -54,7 +54,7 @@ Social Feed screen is based on **Facebook**.
   - [x] :star: **Bonus:** Add buttons to sign up with Facebook & Twitter
 - [x] Design & build an Login Screen
   - [x] :star: **Bonus:** Add buttons to login with Facebook & Twitter
-- [ ] Design & build an Profile Screen
+- [x] Design & build an Profile Screen
   - [x] :star: **Bonus:** Add the Logout button
 - [x] Design & build an Social Feed Screen with [Mock Data](https://raw.githubusercontent.com/mobilespace/daug-mobile/c4d4a331564ee490e1162f3733f3023afe3defc3/app/utils/constants.js)
 - [x] Attach screenshots/gif of screens to `README.MD`
