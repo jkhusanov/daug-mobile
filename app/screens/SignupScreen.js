@@ -67,7 +67,7 @@ export default class SignupScreen extends React.Component {
             value={name}
             onChangeText={(name) => this.setState({name})}
             containerStyle={styles.inputElementsContainer}
-            // If email input is wrong use: shake={true}
+            // If name input is already in use: shake={true}
             leftIcon={
               <Feather
                 name='user'

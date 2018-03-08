@@ -100,7 +100,7 @@ Social Feed screen is based on **Facebook**.
 - [x] Setup a **IntroStack** (using StackNavigator) for the Intro Screen (root), Login Screen (push) & Sign Up Screen (push)
 - [x] Setup a **HomeTabs** (using TabNavigator) for the Social Feed Screen (default) and Profile Screen
 - [x] Setup a **RootNavigator** (using StackNavigator) with the **IntroStack** & **HomeTabs** with `mode: "modal"`
-- [ ] Design & build an Edit Profile Screen
+- [x] Design & build an Edit Profile Screen
 - [ ] Setup a **ProfileStack** (using StackNavigator) for the Profile Screen (root) and Edit Profile Screen (push)
 - [ ] Design & build an Post Details Screen
 - [ ] Design & build an Create Post Screen

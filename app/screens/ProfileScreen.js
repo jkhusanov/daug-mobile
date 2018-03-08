@@ -52,7 +52,7 @@ export default class ProfileScreen extends React.Component {
               </View>
               <View style={styles.profileInfoBottomContainer}>
                 <Text style={styles.profileName}>Bars</Text>
-                <Text style={styles.profileInfoText}>I love swimming</Text>
+                <Text style={styles.profileInfoText}>I love swimming!</Text>
               </View>
             </View>
           </View>
