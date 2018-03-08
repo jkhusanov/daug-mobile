@@ -2,11 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,StatusBar } from 'react-native';
 import { LinearGradient } from 'expo';
 
-
-import LoginScreen from './LoginScreen';
-import SignupScreen from './SignupScreen';
-
-
 import LOGO from '../../assets/daug_logo.png';
 
 

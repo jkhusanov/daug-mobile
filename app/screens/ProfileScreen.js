@@ -46,6 +46,7 @@ export default class ProfileScreen extends React.Component {
                       buttonStyle={styles.profileEditButton}
                       containerStyle={{ marginBottom: 10, marginTop:10 }}
                       textStyle={styles.profileEditText}
+                      onPress={() => this.props.navigation.navigate('EditProfile')}
                     />
                   </View>
                 </View>

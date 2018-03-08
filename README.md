@@ -101,13 +101,14 @@ Social Feed screen is based on **Facebook**.
 - [x] Setup a **HomeTabs** (using TabNavigator) for the Social Feed Screen (default) and Profile Screen
 - [x] Setup a **RootNavigator** (using StackNavigator) with the **IntroStack** & **HomeTabs** with `mode: "modal"`
 - [x] Design & build an Edit Profile Screen
-- [ ] Setup a **ProfileStack** (using StackNavigator) for the Profile Screen (root) and Edit Profile Screen (push)
-- [ ] Design & build an Post Details Screen
-- [ ] Design & build an Create Post Screen
-- [ ] Setup a **SocialStack** (using StackNavigator) for the Social Feed Screen (root), Post Details Screen (push) & Create Post Screen (push)
+- [ ] Setup a **ProfileStack** (using StackNavigator) for the Profile Screen (root), Post Details Screen (push) & Edit Profile Screen (modal) with mode: "modal" and custom RNE header component
+- [ ] Design & build a Post Details Screen
+- [ ] Design & build a Create Post Screen
+- [ ] Setup a **SocialStack** (using StackNavigator) for the Social Feed Screen (root), Post Details Screen (push) & Create Post Screen (modal) with mode: "modal" and custom RNE header component
+- [ ] :star: **Bonus:** Display Posts on ProfileScreen
 - [ ] :star: **Bonus:** Setup a **HomeNavigator**(using DrawerNavigator) with the **HomeTabs** (as root) and update **RootNavigator** to use **HomeNavigator** instead of **HomeTabs**
-- [ ] :star: **Bonus:** Use [SafeAreaView](https://reactnavigation.org/docs/handling-iphonex.html) on each screen to support iPhone X
-- [ ] Attach working gif of navigation to `README.MD`
+- [x] Add working gif of app to `README.MD`
+
 
 ### Demo
 

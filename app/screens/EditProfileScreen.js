@@ -18,7 +18,6 @@ export default class EditProfileScreen extends React.Component {
   render() {
     const {name, email, password, bio}  = this.state
     return (
-      <SafeAreaView>
       <ScrollView style={{backgroundColor: '#fff'}}>
         <View style={styles.mainContainer}>
           <View style={styles.editInfoBasicContainer}>
@@ -73,7 +72,6 @@ export default class EditProfileScreen extends React.Component {
           </View>
         </View>
       </ScrollView>
-      </SafeAreaView>
     );
   }
 }
@@ -82,11 +80,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   editInfoBasicContainer: {
-    flex: 2,
+    flex: 1,
     justifyContent: 'center'
   },
   photoChangeContainer: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -101,9 +98,7 @@ const styles = StyleSheet.create({
     borderColor: '#cccccc', 
   },
   avatarChangeButtonContainer: {
-    flex: 1,
     alignItems: 'center',
-
   },
   avatarChangeButton: {
     marginVertical: 10,
@@ -152,8 +147,4 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     fontSize: 15,
   }
-
-
-
-
 });
