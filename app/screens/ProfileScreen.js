@@ -6,6 +6,13 @@ import COVER  from '../../assets/profile/cover.jpeg';
 import AVATAR from '../../assets/profile/avatar.jpeg';
 
 export default class ProfileScreen extends React.Component {
+  static navigationOptions = {
+    title: '',
+    headerStyle: { backgroundColor: '#2F80ED', borderBottomWidth: 0, borderBottomColor: '#2F80ED',  elevation: null, },
+    headerTintColor: 'white',
+    headerTitleStyle: { color: 'white', fontSize: 20 },
+    borderBottomWidth:0,
+  };
   render() {
     return (
       <ScrollView style={{backgroundColor: '#fff'}}>
@@ -62,6 +69,15 @@ export default class ProfileScreen extends React.Component {
               <Button
                 text = 'Logout'
                 onPress={() => this.props.navigation.navigate('Intro')}
+                textStyle={styles.profileLogoutButtonText}
+                buttonStyle={styles.profileLogoutButton}
+              >  
+              </Button>
+            </View>
+            <View style={styles.profileLogoutContainer}>
+              <Button
+                text = 'Post Details '
+                onPress={() => this.props.navigation.navigate('PostDetails')}
                 textStyle={styles.profileLogoutButtonText}
                 buttonStyle={styles.profileLogoutButton}
               >  

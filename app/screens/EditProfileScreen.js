@@ -1,6 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, SafeAreaView } from 'react-native';
-import { Button, Input } from 'react-native-elements'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, SafeAreaView, KeyboardAvoidingView } from 'react-native';
+import { Button, Input, Header } from 'react-native-elements'
 
 
 import AVATAR from '../../assets/profile/avatar.jpeg';
@@ -16,66 +16,100 @@ export default class EditProfileScreen extends React.Component {
     };
   }
   render() {
-    const {name, email, password, bio}  = this.state
+    const { name, email, password, bio } = this.state
     return (
-      <ScrollView style={{backgroundColor: '#fff'}}>
-        <View style={styles.mainContainer}>
-          <View style={styles.editInfoBasicContainer}>
-            <View style={styles.photoChangeContainer}>
-              <View style={styles.avatarContainer}>
-                <Image
-                  style={styles.avatarImage}
-                  source={AVATAR}
-                />
+      <View style={styles.profileEditContainer}>
+        <SafeAreaView style={{ backgroundColor: '#FAFAFA', }}>
+          <Header
+            leftComponent={
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                <Text style={styles.navBar}>Cancel</Text>
+              </TouchableOpacity>
+            }
+            centerComponent={{
+              text: 'Edit Profile',
+              style: {
+                color: '#2F80ED', fontSize: 20,
+                fontWeight: 'bold',
+              }
+            }}
+            rightComponent={
+              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                <Text style={styles.navBar}>Done</Text>
+              </TouchableOpacity>
+            }
+            outerContainerStyles={{ backgroundColor: '#FAFAFA' }}
+          />
+        </SafeAreaView>
+        <ScrollView style={{ backgroundColor: '#fff' }}>
+          <KeyboardAvoidingView behavior="position">
+            <View style={styles.mainContainer}>
+              <View style={styles.editInfoBasicContainer}>
+                <View style={styles.photoChangeContainer}>
+                  <View style={styles.avatarContainer}>
+                    <Image
+                      style={styles.avatarImage}
+                      source={AVATAR}
+                    />
+                  </View>
+                  <View style={styles.avatarChangeButtonContainer}>
+                    <TouchableOpacity>
+                      <Text style={styles.avatarChangeButton}>Change Photo</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={styles.detailsChangeContainer}>
+                  <View style={styles.changeInputContainer}>
+                    <Text style={styles.inputLabel}>Name</Text>
+                    <Input
+                      placeholder='Input your name'
+                      placeholderTextColor="black"
+                      style={styles.inputStyle}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      keyboardType="default"
+                      returnKeyType="done"
+                      value={name}
+                      onChangeText={(name) => this.setState({ name })}
+                      containerStyle={styles.inputElementsContainer}
+                    />
+
+                  </View>
+                  <View style={styles.changeInputContainer}>
+                    <Text style={styles.inputLabel}>Bio</Text>
+                    <Input
+                      placeholder='Short info about you'
+                      placeholderTextColor="black"
+                      style={styles.inputStyle}
+                      autoCapitalize="none"
+                      autoCorrect={true}
+                      keyboardType="default"
+                      returnKeyType="done"
+                      value={bio}
+                      onChangeText={(bio) => this.setState({ bio })}
+                      containerStyle={styles.inputElementsContainer}
+                    />
+                  </View>
+                </View>
+
               </View>
-              <View style={styles.avatarChangeButtonContainer}>
-                <TouchableOpacity>
-                  <Text style={styles.avatarChangeButton}>Change Photo</Text>
-                </TouchableOpacity>
+              <View style={styles.editPrivateInfoContainer}>
+                <Text style={styles.privateInfoLabel}>Private Information</Text>
               </View>
             </View>
-            <View style={styles.detailsChangeContainer}>
-            <View style={styles.changeInputContainer}>
-              <Text style={styles.inputLabel}>Name</Text>
-              <Input
-                placeholder='Input your name'
-                placeholderTextColor="black"
-                style ={styles.inputStyle}
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="default"
-                returnKeyType="done"
-                value={name}
-                onChangeText={(name) => this.setState({ name })}
-                containerStyle={styles.inputElementsContainer}
-              />
-            </View>
-            <View style={styles.changeInputContainer}>
-              <Text style={styles.inputLabel}>Bio</Text>
-              <Input
-                placeholder='Short info about you'
-                placeholderTextColor="black"
-                style ={styles.inputStyle}
-                autoCapitalize="none"
-                autoCorrect={true}
-                keyboardType="default"
-                returnKeyType="done"
-                value={bio}
-                onChangeText={(bio) => this.setState({ bio })}
-                containerStyle={styles.inputElementsContainer}
-              />
-            </View>
-            </View>
-          </View>
-          <View style={styles.editPrivateInfoContainer}>
-            <Text style={styles.privateInfoLabel}>Private Information</Text>
-          </View>
-        </View>
-      </ScrollView>
+          </KeyboardAvoidingView>
+        </ScrollView>
+      </View>
     );
   }
 }
 const styles = StyleSheet.create({
+  profileEditContainer: {
+    flex: 1,
+  },
+  navBar: {
+    fontSize: 16,
+  },
   mainContainer: {
     flex: 1,
   },
@@ -86,6 +120,7 @@ const styles = StyleSheet.create({
   photoChangeContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: 22,
   },
   avatarContainer: {
     height: 100,
@@ -95,7 +130,7 @@ const styles = StyleSheet.create({
     width: 100,
     borderRadius: 50,
     borderWidth: 1,
-    borderColor: '#cccccc', 
+    borderColor: '#cccccc',
   },
   avatarChangeButtonContainer: {
     alignItems: 'center',
@@ -140,7 +175,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderColor: '#d9d9d9',
     borderBottomWidth: 1,
-    
+
   },
   privateInfoLabel: {
     color: '#737373',

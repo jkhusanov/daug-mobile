@@ -15,5 +15,8 @@ export default StackNavigator({
 }, {
   initialRouteName: 'Intro',
   mode: 'modal',
-  headerMode: 'none'
+  headerMode: 'none',
+  navigationOptions: {
+    gesturesEnabled: false,
+  },
 });

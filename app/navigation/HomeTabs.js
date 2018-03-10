@@ -6,7 +6,9 @@ import { SimpleLineIcons, FontAwesome } from '@expo/vector-icons';
 
 import SocialFeedScreen from '../screens/SocialFeedScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import ProfileStack from '../navigation/ProfileStack';
 
+// import ProfileNavigator from '../navigation/ProfileNavigator';
 
 
 const HomeTabs = TabNavigator({
@@ -24,7 +26,7 @@ const HomeTabs = TabNavigator({
     }
   },
   ProfileTab: {
-    screen: ProfileScreen,
+    screen: ProfileStack,
     navigationOptions: {
       tabBarLabel: 'Profile',
       tabBarIcon: ({ tintColor }) => (
@@ -33,7 +35,7 @@ const HomeTabs = TabNavigator({
           color={tintColor}
           size={Platform.OS === 'ios' ? 22 : 25}
         />
-      )
+      ),
     }
   }
 }, {
