@@ -15,7 +15,6 @@ export default class PostDetailsScreen extends React.Component {
   });
   constructor(props) {
     super(props);
-    console.log(props.navigation.state.params)
     const { member } = props.navigation.state.params
     this.state = {
       member: member,

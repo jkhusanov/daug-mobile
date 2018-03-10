@@ -12,16 +12,16 @@ export default class SocialFeedScreen extends React.Component {
       fontSize: 20,
       fontWeight: 'bold',
     },
+    headerStyle: { backgroundColor: '#FAFAFA', borderBottomWidth: 0.5, borderBottomColor: '#aaaaaa',},
   });
   constructor(props) {
     super(props);
     this.state = {
-      liked: false,
+      isLiked: false,
     };
   }
   renderMembers(member) {
-    const { liked } = this.state;
-    const likedTrue = !(liked === true);
+    const { isLiked } = this.state;
     return (
       <View>
         <StatusBar
@@ -77,13 +77,11 @@ export default class SocialFeedScreen extends React.Component {
             </View>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
               <TouchableOpacity
-                onPress={() =>
-                  this.setState({ liked: true })
-                }>
+                onPress={() => { console.log('like pressed') , this.setState({ isLiked: true }), console.log('and applied', {isLiked}) }}>
                 <Icon
                   name='heart'
                   type='font-awesome'
-                  iconStyle={[styles.likeIcon, likedTrue && { color: 'red' }]}
+                  color={isLiked ? 'red' : 'black'}
                   size={25}
                 />
               </TouchableOpacity>
@@ -98,6 +96,19 @@ export default class SocialFeedScreen extends React.Component {
     return (
       <View style={styles.container}>
         <ScrollView>
+          <View style={styles.createPostContainer}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost')}>
+              <Text style={styles.createPostLabel}>Create Post</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost')}>
+            <Icon
+                name='picture'
+                type='simple-line-icon'
+                size={23}
+                iconStyle={styles.photoPostIcon}
+              />
+            </TouchableOpacity>
+          </View>
           <View style={styles.flatListContainer}>
             <FlatList
               data={SOCIAL_FEED_MOCK_DATA}
@@ -163,7 +174,6 @@ const styles = StyleSheet.create({
   },
   postContainer: {
   },
-
   postImage: {
     width: '100%',
     height: 230,
@@ -173,8 +183,6 @@ const styles = StyleSheet.create({
     color: '#44484B',
     fontSize: 15,
   },
-
-
   postInteractionContainer: {
 
   },
@@ -208,10 +216,28 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     color: '#44484B',
     fontSize: 15,
+  },
+  createPostContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    height: 50,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#fcfcfd',
+    borderBottomWidth: 0.3,
+    borderBottomColor: '#aaaaaa',
+  },
+  createPostLabel:{
+    color: '#2F80ED',
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginLeft: 20,
 
   },
-  likeIcon: {
-    color: '#666666'
+  photoPostIcon: {
+    marginRight: 20,
+    color: '#ff99cc',
+    
   }
 
 
