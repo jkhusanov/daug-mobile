@@ -112,6 +112,9 @@ Social Feed screen is based on **Facebook**.
 
 ### Demo
 
+![assignment_2](https://github.com/jkhusanov/daug-mobile/blob/master/screenshots/demo-app.gif)
+
+
 ## Submission
 
 Once you have completed each assignment above, please create a new issue on this repo with the title as your name and add the link to your repo in the description. Additionally please publish your Expo app and add the link as a comment on your submission issue. One of the TA's will review your code and add your name to the list of completed submissions below if all looks good.
