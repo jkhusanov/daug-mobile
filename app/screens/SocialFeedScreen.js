@@ -1,16 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableHighlight, Image, ScrollView, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableHighlight, TouchableOpacity, Image, ScrollView, StatusBar } from 'react-native';
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { Button, Icon } from 'react-native-elements';
-import {SOCIAL_FEED_MOCK_DATA} from '../utils/constants';
+import { SOCIAL_FEED_MOCK_DATA } from '../utils/constants';
 
 export default class SocialFeedScreen extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Daug',
+    headerTintColor: '#2F80ED',
+    headerTitleStyle: {
+      fontSize: 20,
+      fontWeight: 'bold',
+    },
+  });
   constructor(props) {
     super(props);
     this.state = {
+      liked: false,
     };
   }
   renderMembers(member) {
+    const { liked } = this.state;
+    const likedTrue = !(liked === true);
     return (
       <View>
         <StatusBar
@@ -20,63 +31,80 @@ export default class SocialFeedScreen extends React.Component {
         <View style={styles.membersRowContainer} key={member}>
           <View style={styles.postInfoTopContainer}>
             <View style={styles.postAuthorAvatarContainer}>
-              <Image source={{ uri: member.image }} style={styles.avatar} />
+              <TouchableOpacity>
+                <Image source={{ uri: member.image }} style={styles.avatar} />
+              </TouchableOpacity>
             </View>
-            <View stlyle={styles.postAuthorInfoContainer}>
-              <View stlyle={styles.nameContainer}>
-                <Text style={styles.nameLabel}>{member.name}</Text>
+            <View style={styles.postAuthorInfoContainer}>
+              <View style={styles.nameContainer}>
+                <TouchableOpacity>
+                  <Text style={styles.nameLabel}>{member.name}</Text>
+                </TouchableOpacity>
               </View>
-              <View stlyle={styles.locationContainer}>
-                <Text style={styles.locationLabel}>{member.location}</Text>
+              <View style={styles.locationContainer}>
+                <TouchableOpacity>
+                  <Text style={styles.locationLabel}>{member.location}</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
           <View style={styles.postContainer}>
-            <View style={styles.postImageContainer}>           
-              <Image style={styles.postImage} source={{uri: member.post.image}} />
-            </View>
+            <TouchableHighlight
+              onPress={() =>
+                this.props.navigation.navigate('PostDetails', { member })
+              }
+            >
+              <View style={styles.postImageContainer}>
+                <Image style={styles.postImage} source={{ uri: member.post.image }} />
+              </View>
+            </TouchableHighlight>
             <View style={styles.postCaptionContainer}>
               <Text style={styles.postCaption}> {member.post.caption}</Text>
             </View>
           </View>
           <View style={styles.postInfoBottomContainer}>
             <View style={styles.postDataContainer}>
-              <Text style={styles.postDate}>{member.post.date}</Text> 
+              <Text style={styles.postDate}>{member.post.date}</Text>
             </View>
             <View style={styles.postCommentContainer}>
               <Icon
                 name='comments'
                 type='font-awesome'
                 size={25}
-                color='black'
+                color='#666666'
               />
               <Text style={styles.postActionText}>10</Text>
             </View>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
-              <Icon
-                name='heart'
-                type='font-awesome'
-                color='red' 
-                size={25}
-              />
+              <TouchableOpacity
+                onPress={() =>
+                  this.setState({ liked: true })
+                }>
+                <Icon
+                  name='heart'
+                  type='font-awesome'
+                  iconStyle={[styles.likeIcon, likedTrue && { color: 'red' }]}
+                  size={25}
+                />
+              </TouchableOpacity>
               <Text style={styles.postActionText}>250</Text>
             </View>
           </View>
         </View>
-    </View>
+      </View>
     )
   }
   render() {
     return (
       <View style={styles.container}>
-      <ScrollView>
-        <View style={styles.flatListContainer}>
-          <FlatList
-            data={SOCIAL_FEED_MOCK_DATA}
-            keyExtractor={(item, index) => index}
-            renderItem={({ item }) => this.renderMembers(item)}
-          />
-        </View>
+        <ScrollView>
+          <View style={styles.flatListContainer}>
+            <FlatList
+              data={SOCIAL_FEED_MOCK_DATA}
+              keyExtractor={(item, index) => index}
+              renderItem={({ item }) => this.renderMembers(item)}
+            />
+          </View>
         </ScrollView>
       </View>
     );
@@ -104,7 +132,7 @@ const styles = StyleSheet.create({
   },
   nameContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
   },
   nameLabel: {
     fontSize: 18,
@@ -131,7 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: 'black',
     marginLeft: 10,
-    
+
   },
   postContainer: {
   },
@@ -148,7 +176,7 @@ const styles = StyleSheet.create({
 
 
   postInteractionContainer: {
-    
+
   },
   postInfoBottomContainer: {
     height: 50,
@@ -181,7 +209,11 @@ const styles = StyleSheet.create({
     color: '#44484B',
     fontSize: 15,
 
+  },
+  likeIcon: {
+    color: '#666666'
   }
+
 
 
 });

@@ -1,11 +1,11 @@
 import { StackNavigator } from 'react-navigation';
-
-import ProfileScreen from '../screens/ProfileScreen';
+import SocialFeedScreen from '../screens/SocialFeedScreen';
 import PostDetailsScreen from '../screens/PostDetailsScreen';
 
+
 export default StackNavigator ({
-  Profile: {
-    screen: ProfileScreen,
+  Social: {
+    screen: SocialFeedScreen
   },
   PostDetails: {
     screen: PostDetailsScreen,
@@ -13,6 +13,5 @@ export default StackNavigator ({
   
 },
 {
-  initialRouteName: 'Profile',
-  
+  initialRouteName: 'Social',
 }); 

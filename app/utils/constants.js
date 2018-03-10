@@ -142,4 +142,5 @@ export const SOCIAL_FEED_MOCK_DATA = [
       date: '2 hrs ago'
     }
   }
+  
 ]

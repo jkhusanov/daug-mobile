@@ -102,7 +102,7 @@ Social Feed screen is based on **Facebook**.
 - [x] Setup a **RootNavigator** (using StackNavigator) with the **IntroStack** & **HomeTabs** with `mode: "modal"`
 - [x] Design & build an Edit Profile Screen
 - [x] Setup a **ProfileStack** (using StackNavigator) for the Profile Screen (root), Post Details Screen (push) & Edit Profile Screen (modal) with mode: "modal" and custom RNE header component
-- [ ] Design & build a Post Details Screen
+- [x] Design & build a Post Details Screen
 - [ ] Design & build a Create Post Screen
 - [ ] Setup a **SocialStack** (using StackNavigator) for the Social Feed Screen (root), Post Details Screen (push) & Create Post Screen (modal) with mode: "modal" and custom RNE header component
 - [ ] :star: **Bonus:** Display Posts on ProfileScreen

@@ -1,19 +1,22 @@
-// import { StackNavigator } from 'react-navigation';
+import { StackNavigator } from 'react-navigation';
 
-// import ProfileStack from './ProfileStack';
-// import EditProfileScreen from '../screens/EditProfileScreen';
+import ProfileStack from './ProfileStack';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
-// const ProfileNavigator = StackNavigator({
-//   ProfileStack: {
-//     screen: ProfileStack
-//   },
-//   EditProfile: {
-//     screen: EditProfileScreen
-//   }
-// }, {
-//   initialRouteName: 'ProfileStack',
-//   mode: 'modal',
-//   headerMode: 'none'
-// });
+const ProfileNavigator = StackNavigator({
+  ProfileStack: {
+    screen: ProfileStack
+  },
+  EditProfile: {
+    screen: EditProfileScreen,
+  },
+}, {
+  initialRouteName: 'ProfileStack',
+  mode: 'modal',
+  headerMode: 'none',
+  navigationOptions: {
+    gesturesEnabled: false,
+  },
+});
 
-// export default ProfileNavigator;
+export default ProfileNavigator;
