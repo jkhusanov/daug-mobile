@@ -81,7 +81,7 @@ export default class SocialFeedScreen extends React.Component {
                 <Icon
                   name='heart'
                   type='font-awesome'
-                  color={isLiked ? 'red' : 'black'}
+                  color={'red'}
                   size={25}
                 />
               </TouchableOpacity>
