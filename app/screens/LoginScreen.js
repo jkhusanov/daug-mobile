@@ -18,9 +18,74 @@ export default class LoginScreen extends React.Component {
     this.state = {
       email: '',
       password: '',
-      screen: '',
+      loginCheck: false,
     };
   }
+  async loginButtonPressed() {
+    this.setState({ isLoading: true })
+
+    const { email, password, loginCheck } = this.state
+    const { navigate } = this.props.navigation
+
+    var details = {
+      'email': email,
+      'password': password
+    };
+
+    var formBody = [];
+
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+
+    formBody = formBody.join("&");
+
+    try {
+      let response = await fetch(`https://daug-app.herokuapp.com/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody
+      });
+
+      let responseJSON = null
+
+      if (response.status === 201) {
+        responseJSON = await response.json();
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false })
+        Alert.alert(
+          'Welcome back!',
+          'You have successfully logged in your account!',
+          [
+            { text: "Continue", onPress: () => navigate("Home") }
+          ],
+          { cancelable: false }
+        )
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false, errors: responseJSON.errors})
+        Alert.alert('Login failed!', `Unable to login.. ${error}!`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, response: error })
+
+      console.log(error)
+
+      Alert.alert('Login failed!', 'Unable to Login. Please try again later')
+    }
+  }
+ /*
   handleSubmit = () => {
     const {screen, email, password}  = this.state
     //Display alert
@@ -49,14 +114,10 @@ export default class LoginScreen extends React.Component {
         { cancelable: false},
       )
     }
-  }
+  } */
   render() {
-    const { screen, email, password } = this.state;
+    const { email, password } = this.state;
     const isLoginNotEmpty = !(email === '' || password === '');
-
-    if (screen === 'SocialFeedScreen') {
-      return <SocialFeedScreen />;
-    }
 
     return (
       <LinearGradient colors={['#2F80ED', '#56CCF2']} style={styles.container}>
@@ -72,7 +133,9 @@ export default class LoginScreen extends React.Component {
             value={email}
             onChangeText={(email) => this.setState({email})}
             containerStyle={styles.inputElementsContainer}
-            // If email input is wrong use: shake={true}
+            onSubmitEditing={() =>
+              this.passwordInput.focus()
+            }
             leftIcon={
               <MaterialCommunityIcons
                 name='email-outline'
@@ -83,6 +146,7 @@ export default class LoginScreen extends React.Component {
 
           />
           <Input
+            ref={input => (this.passwordInput = input)}
             placeholder='Password'
             placeholderTextColor="white"
             inputStyle={{ color: 'white'}}
@@ -93,6 +157,9 @@ export default class LoginScreen extends React.Component {
             value={password}
             onChangeText={(password) => this.setState({password})}
             containerStyle={styles.inputElementsContainer}
+            onSubmitEditing={() => {
+              this.loginButtonPressed()
+            }}
             leftIcon={
               <SimpleLineIcons
                 name='lock'
@@ -113,7 +180,7 @@ export default class LoginScreen extends React.Component {
             }
             iconRight
             text='Login'
-            onPress={this.handleSubmit}
+            onPress={() => this.loginButtonPressed()}
             buttonStyle={[styles.loginButton, isLoginNotEmpty && {backgroundColor: '#70D4B4', borderColor: '#0E9577'}]}
           />
           <Button

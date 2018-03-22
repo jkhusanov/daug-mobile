@@ -18,7 +18,6 @@ export default class SignupScreen extends React.Component {
       name: '',
       email: '',
       password: '',
-      screen: '',
     };
   }
 
@@ -117,7 +116,7 @@ export default class SignupScreen extends React.Component {
   //   }
   // }
   render() {
-    const { screen, name, email, password } = this.state;
+    const { name, email, password } = this.state;
     const isSignupNotEmpty = !(name === ''|| email === '' || password === '');
 
     return (
@@ -134,7 +133,9 @@ export default class SignupScreen extends React.Component {
             value={name}
             onChangeText={(name) => this.setState({name})}
             containerStyle={styles.inputElementsContainer}
-            // If name input is already in use: shake={true}
+            onSubmitEditing={() =>
+              this.emailInput.focus()
+            }
             leftIcon={
               <Feather
                 name='user'
@@ -144,6 +145,7 @@ export default class SignupScreen extends React.Component {
             }
           />
         <Input
+            ref={input => (this.emailInput = input)}
             placeholder='Email'
             placeholderTextColor="white"
             inputStyle={{ color: 'white'}}
@@ -154,7 +156,9 @@ export default class SignupScreen extends React.Component {
             value={email}
             onChangeText={(email) => this.setState({email})}
             containerStyle={styles.inputElementsContainer}
-            // If email input is wrong use: shake={true}
+            onSubmitEditing={() =>
+              this.passwordInput.focus()
+            }
             leftIcon={
               <MaterialCommunityIcons
                 name='email-outline'
@@ -164,6 +168,7 @@ export default class SignupScreen extends React.Component {
             }
           />
           <Input
+            ref={input => (this.passwordInput = input)}
             placeholder='Password'
             placeholderTextColor="white"
             inputStyle={{ color: 'white'}}
@@ -174,6 +179,9 @@ export default class SignupScreen extends React.Component {
             value={password}
             onChangeText={(password) => this.setState({password})}
             containerStyle={styles.inputElementsContainer}
+            onSubmitEditing={() => {
+              this.signupButtonPressed()
+            }}
             leftIcon={
               <SimpleLineIcons
                 name='lock'

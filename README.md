@@ -146,7 +146,7 @@ Social Feed screen is based on **Facebook**.
 - [x] Intro Screen - Make simple **`GET`** request to **`/api`** to check server status
 - [x] Signup Screen - Make **`POST`** request to **`/auth/signup`** to create a new user
 	- [ ] :star: **Bonus:** Add UI validation to Signup Screen - name (not null), email (format) & password (min. 8 characters)
-- [ ] Login Screen - Make **`POST`** request to **`/auth/login`** to validate and login an existing user
+- [x] Login Screen - Make **`POST`** request to **`/auth/login`** to validate and login an existing user
 	- [ ] :star: **Bonus:** Add UI validation to Login Screen - email (format) & password (min. 8 characters)
 - [x] Social Feed Screen - Make **`GET`** request to **`/api/feed/`** to get all posts for social feed
 	- [ ] :star: **Bonus:** Use `ActivityIndicator` to show placeholder loading when fetching feed data
