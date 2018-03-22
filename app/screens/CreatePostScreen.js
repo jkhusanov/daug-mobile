@@ -1,7 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, Image, SafeAreaView, KeyboardAvoidingView, Keyboard, Alert } from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, Image, SafeAreaView, KeyboardAvoidingView, Keyboard, Alert, ImageEditor } from 'react-native';
 import { Button, Icon, Header } from 'react-native-elements';
-import { Entypo } from '@expo/vector-icons';
+import { Entypo, Ionicons } from '@expo/vector-icons';
+import { ImagePicker } from 'expo';
+
 
 import AVATAR from '../../assets/profile/avatar.jpeg';
 
@@ -12,17 +14,19 @@ export default class CreatePostScreen extends React.Component {
       text: '',
       name: 'Bars',
       location: ' Add Location',
+      image: null,
     };
   }
 
   async createPostPressed() {
     this.setState({ isLoading: true })
 
-    const { text } = this.state
+    const { text, image } = this.state
     const { navigate } = this.props.navigation
 
     var details = {
       'description': text,
+      'image': image
     };
 
     var formBody = [];
@@ -54,7 +58,7 @@ export default class CreatePostScreen extends React.Component {
         this.setState({ isLoading: false })
         Alert.alert(
           'Success!',
-          'Your post is posted!',
+          'Your post is created and posted!',
           [
             { text: "Continue", onPress: () => this.props.navigation.goBack() }
           ],
@@ -77,38 +81,34 @@ export default class CreatePostScreen extends React.Component {
       Alert.alert('Posting failed!', 'Unable to Post. Please try again later')
     }
   }
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
 
+    if (result.cancelled) {
+      console.log('got here');
+      return;
+    }
 
-  // handleSubmit = () => {
-  //   //Display alert
-  //   const { text } = this.state
-  //   if (text != '') {
-  //     Keyboard.dismiss
-  //     console.log("Share done")
-  //     Alert.alert(
-  //       'Success!',
-  //       'Your post is shared with your friends',
-  //       [
-  //         { text: 'OK', onPress: () => this.props.navigation.goBack() },
-  //       ],
-  //       { cancelable: false }
-  //     );
-  //   }
-  //   else {
-  //     Keyboard.dismiss
-  //     console.log("Share done")
-  //     Alert.alert(
-  //       'Invalid!',
-  //       'You do not have anything to share' + '\nPlease input your ideas below ', 
-  //       [
-  //         { text: 'Try Again', onPress: () => console.log("Tried again") },
-  //       ],
-  //       { cancelable: false }
-  //     );
-  //   }
-  // }
+    let resizedUri = await new Promise((resolve, reject) => {
+      ImageEditor.cropImage(result.uri,
+        {
+          offset: { x: 0, y: 0 },
+          size: { width: result.width, height: result.height },
+          displaySize: { width: 50, height: 50 },
+          resizeMode: 'contain',
+        },
+        (uri) => resolve(uri),
+        () => reject(),
+      );
+    });
+
+    this.setState({ image: resizedUri });
+  };
   render() {
-    const {text, name, location} = this.state
+    const { text, name, location, image } = this.state
     return (
       <View style={styles.createPostContainer}>
         <SafeAreaView style={{ backgroundColor: '#FAFAFA', }}>
@@ -133,11 +133,11 @@ export default class CreatePostScreen extends React.Component {
             outerContainerStyles={{ backgroundColor: '#FAFAFA' }}
           />
         </SafeAreaView>
-        <View style={styles.mainContainer}> 
+        <View style={styles.mainContainer}>
           <View style={styles.postInfoContainer}>
             <View style={styles.postAuthorAvatarContainer}>
               <TouchableOpacity>
-                <Image source={ AVATAR } style={styles.avatar} />
+                <Image source={AVATAR} style={styles.avatar} />
               </TouchableOpacity>
             </View>
             <View style={styles.postAuthorInfoContainer}>
@@ -161,18 +161,29 @@ export default class CreatePostScreen extends React.Component {
             </View>
           </View>
           <KeyboardAvoidingView behavior="height">
-          <View style={styles.textInputContainer}>
-            <TextInput
-              editable={true}
-              placeholder={"Share your thoughts!"}
-              placeholderTextColor={'gray'}
-              multiline = {true}
-              onChangeText={(text) => this.setState({text})}
-              value={text}
-              style={styles.postTextInput}
-            />
-          </View>
+            <View style={styles.textInputContainer}>
+              <TextInput
+                editable={true}
+                placeholder={"Share your thoughts!"}
+                placeholderTextColor={'gray'}
+                multiline={true}
+                onChangeText={(text) => this.setState({ text })}
+                value={text}
+                style={styles.postTextInput}
+              />
+            </View>
           </KeyboardAvoidingView >
+          <View style={styles.uploadImageContainer}>
+            <TouchableOpacity onPress={this._pickImage}>
+              <Ionicons
+                name='md-image'
+                size={50}
+                color='#2F80ED'
+                style={styles.photoPostIcon}
+              />
+              <Text style={styles.photoLabel}>Upload from library</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -182,12 +193,12 @@ export default class CreatePostScreen extends React.Component {
 const styles = StyleSheet.create({
   createPostContainer: {
     flex: 1,
-    backgroundColor: 'white'  
+    backgroundColor: 'white'
   },
   mainContainer: {
     flex: 1,
   },
-  postInfoContainer:{
+  postInfoContainer: {
     height: 70,
     flexDirection: 'row',
     alignItems: 'center',
@@ -227,10 +238,20 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10,
   },
-  postTextInput:{
+  postTextInput: {
     height: 200,
     fontSize: 22,
     color: 'black',
+  },
+  uploadImageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  photoLabel: {
+    color: '#737373'
+  },
+  photoPostIcon: {
+    alignSelf: 'center',
   }
 
 });

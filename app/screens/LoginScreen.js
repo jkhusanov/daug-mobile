@@ -24,7 +24,7 @@ export default class LoginScreen extends React.Component {
   handleSubmit = () => {
     const {screen, email, password}  = this.state
     //Display alert
-    if (email === 'user@email.com' && password === 'daugRN') {
+    if (email != '' && password != '') {
       Keyboard.dismiss
       console.log("Correct Phrase Entered")
       Alert.alert(

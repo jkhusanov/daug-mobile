@@ -63,8 +63,8 @@ export default class SignupScreen extends React.Component {
 
         this.setState({ isLoading: false })
         Alert.alert(
-          'Signed Up!',
-          'You have successfully signed up!',
+          'Welcome to our app!',
+          'You have successfully created new account!',
           [
             { text: "Continue", onPress: () => navigate("Home") }
           ],
