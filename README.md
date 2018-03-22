@@ -154,7 +154,7 @@ Social Feed screen is based on **Facebook**.
 	- [ ] :star: **Bonus:** Use `timeSince()` utility function to show relative times for post creation
 - [x] Create Post Screen - Make **`POST`** request to **`/api/users/:userId/posts`** to create a new post by the user
 	- [ ] :star: **Bonus:** Use `DeviceEventEmitter` to emit `new_post_created` event once post is created
-- [ ] Profile Screen - Make **`GET`** request to **`/api/users/:userId`** to get all the profile data
+- [x] Profile Screen - Make **`GET`** request to **`/api/users/:userId`** to get all the profile data
 	- [ ] :star: **Bonus:** Use `ActivityIndicator` to show placeholder loading when fetching profile data
 	- [ ] :star: **Bonus:** Use `DeviceEventEmitter` to trigger fetching profile data when the `user_profile_updated` event is emitted
 - [ ] Edit Profile Screen - Make **`PUT`** request to **`/api/users/:userId`** to update a user's profile information
