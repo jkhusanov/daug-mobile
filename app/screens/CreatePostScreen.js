@@ -9,39 +9,104 @@ export default class CreatePostScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      text: "",
+      text: '',
       name: 'Bars',
       location: ' Add Location',
     };
   }
-  handleSubmit = () => {
-    //Display alert
+
+  async createPostPressed() {
+    this.setState({ isLoading: true })
+
     const { text } = this.state
-    if (text != '') {
-      Keyboard.dismiss
-      console.log("Share done")
-      Alert.alert(
-        'Success!',
-        'Your post is shared with your friends',
-        [
-          { text: 'OK', onPress: () => this.props.navigation.goBack() },
-        ],
-        { cancelable: false }
-      );
+    const { navigate } = this.props.navigation
+
+    var details = {
+      'description': text,
+    };
+
+    var formBody = [];
+
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+
+      formBody.push(encodedKey + "=" + encodedValue);
     }
-    else {
-      Keyboard.dismiss
-      console.log("Share done")
-      Alert.alert(
-        'Invalid!',
-        'You do not have anything to share' + '\nPlease input your ideas below ', 
-        [
-          { text: 'Try Again', onPress: () => console.log("Tried again") },
-        ],
-        { cancelable: false }
-      );
+
+    formBody = formBody.join("&");
+
+    try {
+      let response = await fetch(`https://daug-app.herokuapp.com/api/users/6/posts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody
+      });
+
+      let responseJSON = null
+
+      if (response.status === 201) {
+        responseJSON = await response.json();
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false })
+        Alert.alert(
+          'Success!',
+          'Your post is posted!',
+          [
+            { text: "Continue", onPress: () => this.props.navigation.goBack() }
+          ],
+          { cancelable: false }
+        )
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false, errors: responseJSON.errors })
+        Alert.alert('Cannot post it!', `Empty field.. ${error}!`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, response: error })
+
+      console.log(error)
+
+      Alert.alert('Posting failed!', 'Unable to Post. Please try again later')
     }
   }
+
+
+  // handleSubmit = () => {
+  //   //Display alert
+  //   const { text } = this.state
+  //   if (text != '') {
+  //     Keyboard.dismiss
+  //     console.log("Share done")
+  //     Alert.alert(
+  //       'Success!',
+  //       'Your post is shared with your friends',
+  //       [
+  //         { text: 'OK', onPress: () => this.props.navigation.goBack() },
+  //       ],
+  //       { cancelable: false }
+  //     );
+  //   }
+  //   else {
+  //     Keyboard.dismiss
+  //     console.log("Share done")
+  //     Alert.alert(
+  //       'Invalid!',
+  //       'You do not have anything to share' + '\nPlease input your ideas below ', 
+  //       [
+  //         { text: 'Try Again', onPress: () => console.log("Tried again") },
+  //       ],
+  //       { cancelable: false }
+  //     );
+  //   }
+  // }
   render() {
     const {text, name, location} = this.state
     return (
@@ -61,7 +126,7 @@ export default class CreatePostScreen extends React.Component {
               }
             }}
             rightComponent={
-              <TouchableOpacity onPress={this.handleSubmit}>
+              <TouchableOpacity onPress={() => this.createPostPressed()}>
                 <Text style={styles.navBar}>Share</Text>
               </TouchableOpacity>
             }

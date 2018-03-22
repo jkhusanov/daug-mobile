@@ -3,9 +3,9 @@ export const SOCIAL_FEED_MOCK_DATA = [
     name: 'Monte Thakkar',
     image: 'https://avatars2.githubusercontent.com/u/7840686?s=400&v=4',
     post: {
-      image: 'https://images.pexels.com/photos/356378/pexels-photo-356378.jpeg?w=1260&h=750&dpr=2&auto=compress&cs=tinysrgb',
-      caption: 'This is Roxie! She is 3 years old. She is seen here chilling and posing for the camera',
-      date: '2 hrs ago'
+      image: 'https://slimages.macysassets.com/is/image/MCY/products/6/optimized/8253446_fpx.tif?op_sharpen=1&wid=400&hei=489&fit=fit,1&$filterlrg$',
+      caption: "Charter Club's lovely lace dress lends an effortlessly feminine vibe to your workweek look",
+      date: '15 mins ago'
     }
   },
   {

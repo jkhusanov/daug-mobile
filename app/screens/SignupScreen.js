@@ -21,34 +21,101 @@ export default class SignupScreen extends React.Component {
       screen: '',
     };
   }
-  handleSubmit = () => {
-    const {name, email, password}  = this.state
-    //Display alert
-    if (name != '' && email != '' && password != '') {
-      Keyboard.dismiss
-      console.log("Correct Phrase Entered")
-      Alert.alert(
-        'Success!',
-        'Name: ' + name + '\nEmail: ' + email + '\nPassword ' + password,
-        [
-          {text: 'OK', onPress: () => this.props.navigation.navigate('Home')},
-        ],
-        { cancelable: false }
-      )
-    } else {
-      Keyboard.dismiss
-      console.log("Incorrect Email Or Password Entered")
-      Alert.alert(
-        'Invalid',
-        'Please fill all the fields', 
 
-        [
-          {text: 'Try Again', onPress: () => console.log('Try Again Pressed')},
-        ],
-        { cancelable: false},
-      )
+  async signupButtonPressed() {
+    this.setState({ isLoading: true })
+
+    const { name, email, password } = this.state
+    const { navigate } = this.props.navigation
+
+    var details = {
+      'name': name,
+      'email': email,
+      'password': password
+    };
+
+    var formBody = [];
+
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+
+    formBody = formBody.join("&");
+
+    try {
+      let response = await fetch(`https://daug-app.herokuapp.com/auth/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody
+      });
+
+      let responseJSON = null
+
+      if (response.status === 201) {
+        responseJSON = await response.json();
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false })
+        Alert.alert(
+          'Signed Up!',
+          'You have successfully signed up!',
+          [
+            { text: "Continue", onPress: () => navigate("Home") }
+          ],
+          { cancelable: false }
+        )
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false, errors: responseJSON.errors })
+        Alert.alert('Sign up failed!', `Unable to signup.. ${error}!`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, response: error })
+
+      console.log(error)
+
+      Alert.alert('Sign up failed!', 'Unable to Signup. Please try again later')
     }
   }
+
+  // handleSubmit = () => {
+  //   const {name, email, password}  = this.state
+  //   //Display alert
+  //   if (name != '' && email != '' && password != '') {
+  //     Keyboard.dismiss
+  //     console.log("Correct Phrase Entered")
+  //     Alert.alert(
+  //       'Success!',
+  //       'Name: ' + name + '\nEmail: ' + email + '\nPassword ' + password,
+  //       [
+  //         {text: 'OK', onPress: () => this.props.navigation.navigate('Home')},
+  //       ],
+  //       { cancelable: false }
+  //     )
+  //   } else {
+  //     Keyboard.dismiss
+  //     console.log("Incorrect Email Or Password Entered")
+  //     Alert.alert(
+  //       'Invalid',
+  //       'Please fill all the fields', 
+
+  //       [
+  //         {text: 'Try Again', onPress: () => console.log('Try Again Pressed')},
+  //       ],
+  //       { cancelable: false},
+  //     )
+  //   }
+  // }
   render() {
     const { screen, name, email, password } = this.state;
     const isSignupNotEmpty = !(name === ''|| email === '' || password === '');
@@ -127,7 +194,7 @@ export default class SignupScreen extends React.Component {
             }
             iconRight
             text='Sign Up'
-            onPress={this.handleSubmit}
+            onPress={() => this.signupButtonPressed()}
             buttonStyle={[styles.signupButton, isSignupNotEmpty && {backgroundColor: '#70D4B4', borderColor: '#0E9577'}]}
           />
           <Button

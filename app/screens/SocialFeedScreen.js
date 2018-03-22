@@ -12,16 +12,69 @@ export default class SocialFeedScreen extends React.Component {
       fontSize: 20,
       fontWeight: 'bold',
     },
-    headerStyle: { backgroundColor: '#FAFAFA', borderBottomWidth: 0.5, borderBottomColor: '#aaaaaa',},
+    headerStyle: { backgroundColor: '#FAFAFA', borderBottomWidth: 0.5, borderBottomColor: '#aaaaaa', },
   });
   constructor(props) {
     super(props);
     this.state = {
       isLiked: false,
+      isFeedLoading: true,
+      posts: null,
+
     };
   }
-  renderMembers(member) {
-    const { isLiked } = this.state;
+
+  componentDidMount() {
+    //When the component is loaded
+    this.getFeed()
+  }
+  async getFeed() {
+
+    try {
+      let response = await fetch(`https://daug-app.herokuapp.com/api/feed`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+      });
+
+      let responseJSON = null
+
+      if (response.status === 200) {
+
+        responseJSON = await response.json();
+        console.log(responseJSON)
+        this.setState({
+          isFeedLoading: false,
+          posts: responseJSON,
+        })
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ errors: responseJSON.errors })
+        Alert.alert('Unable to get your feed', `Reason.. ${error}!`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, response: error })
+
+      console.log(error)
+
+      Alert.alert('Unable to get the feed. Please try again later')
+    }
+  }
+  // _renderProfileImage = (image) => {
+  //   if(image) {
+  //     return (
+  //       <Image source={{ uri: image }} style={styles.avatar} />
+  //     )
+  //   }
+  // }
+  _renderMembers(member){
+    const { isFeedLoading, posts, user } = this.state;
+
     return (
       <View>
         <StatusBar
@@ -32,13 +85,16 @@ export default class SocialFeedScreen extends React.Component {
           <View style={styles.postInfoTopContainer}>
             <View style={styles.postAuthorAvatarContainer}>
               <TouchableOpacity>
-                <Image source={{ uri: member.image }} style={styles.avatar} />
+                <Image source={{ uri: member.user.profile_image }} style={styles.avatar} />
+                {/* {this._renderProfileImage(post.user["profile_image"])} */}
               </TouchableOpacity>
             </View>
             <View style={styles.postAuthorInfoContainer}>
               <View style={styles.nameContainer}>
-                <TouchableOpacity>
-                  <Text style={styles.nameLabel}>{member.name}</Text>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Profile', { isHeaderShow: true, user: member.user })}
+                >
+                  <Text style={styles.nameLabel}>{member.user.name}</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.locationContainer}>
@@ -51,20 +107,21 @@ export default class SocialFeedScreen extends React.Component {
           <View style={styles.postContainer}>
             <TouchableHighlight
               onPress={() =>
-                this.props.navigation.navigate('PostDetails', { member })
+                this.props.navigation.navigate('PostDetails', { post: member })
               }
             >
               <View style={styles.postImageContainer}>
-                <Image style={styles.postImage} source={{ uri: member.post.image }} />
+                {/* <Image style={styles.postImage} source={{ uri: member.image }} /> */}
+                {member.image && <Image source={{ uri: member.image || ''}} style={styles.postImage} resizeMode="cover" />}
               </View>
             </TouchableHighlight>
             <View style={styles.postCaptionContainer}>
-              <Text style={styles.postCaption}> {member.post.caption}</Text>
+              <Text style={styles.postCaption}> {member.description}</Text>
             </View>
           </View>
           <View style={styles.postInfoBottomContainer}>
             <View style={styles.postDataContainer}>
-              <Text style={styles.postDate}>{member.post.date}</Text>
+              <Text style={styles.postDate}>{member.createdAt}</Text>
             </View>
             <View style={styles.postCommentContainer}>
               <Icon
@@ -77,7 +134,7 @@ export default class SocialFeedScreen extends React.Component {
             </View>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
               <TouchableOpacity
-                onPress={() => { console.log('like pressed') , this.setState({ isLiked: true }), console.log('and applied', {isLiked}) }}>
+                onPress={() => { console.log('like pressed'), this.setState({ isLiked: true }), console.log('and applied', { isLiked }) }}>
                 <Icon
                   name='heart'
                   type='font-awesome'
@@ -92,7 +149,25 @@ export default class SocialFeedScreen extends React.Component {
       </View>
     )
   }
+  renderList() {
+    const { isFeedLoading, posts, user } = this.state;
+    return (
+    <View style={styles.flatListContainer}>
+    {!isFeedLoading &&
+
+      <FlatList
+        data={posts}
+        extraData={this.state}
+        keyExtractor={(item, index) => index}
+        renderItem={({ item }) => this._renderMembers(item)}
+      />
+    }
+  </View>
+    )
+  }
   render() {
+    const { isFeedLoading, posts, user } = this.state;
+
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -101,7 +176,7 @@ export default class SocialFeedScreen extends React.Component {
               <Text style={styles.createPostLabel}>Create Post</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost')}>
-            <Icon
+              <Icon
                 name='picture'
                 type='simple-line-icon'
                 size={23}
@@ -109,13 +184,7 @@ export default class SocialFeedScreen extends React.Component {
               />
             </TouchableOpacity>
           </View>
-          <View style={styles.flatListContainer}>
-            <FlatList
-              data={SOCIAL_FEED_MOCK_DATA}
-              keyExtractor={(item, index) => index}
-              renderItem={({ item }) => this.renderMembers(item)}
-            />
-          </View>
+          {this.renderList()}
         </ScrollView>
       </View>
     );
@@ -227,7 +296,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0.3,
     borderBottomColor: '#aaaaaa',
   },
-  createPostLabel:{
+  createPostLabel: {
     color: '#2F80ED',
     fontSize: 17,
     fontWeight: 'bold',
@@ -237,7 +306,7 @@ const styles = StyleSheet.create({
   photoPostIcon: {
     marginRight: 20,
     color: '#ff99cc',
-    
+
   }
 
 
