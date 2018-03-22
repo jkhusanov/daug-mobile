@@ -65,13 +65,7 @@ export default class SocialFeedScreen extends React.Component {
       Alert.alert('Unable to get the feed. Please try again later')
     }
   }
-  // _renderProfileImage = (image) => {
-  //   if(image) {
-  //     return (
-  //       <Image source={{ uri: image }} style={styles.avatar} />
-  //     )
-  //   }
-  // }
+
   _renderMembers(member){
     const { isFeedLoading, posts, user } = this.state;
 
@@ -86,7 +80,6 @@ export default class SocialFeedScreen extends React.Component {
             <View style={styles.postAuthorAvatarContainer}>
               <TouchableOpacity>
                 <Image source={{ uri: member.user.profile_image }} style={styles.avatar} />
-                {/* {this._renderProfileImage(post.user["profile_image"])} */}
               </TouchableOpacity>
             </View>
             <View style={styles.postAuthorInfoContainer}>
@@ -111,8 +104,7 @@ export default class SocialFeedScreen extends React.Component {
               }
             >
               <View style={styles.postImageContainer}>
-                {/* <Image style={styles.postImage} source={{ uri: member.image }} /> */}
-                {member.image && <Image source={{ uri: member.image || ''}} style={styles.postImage} resizeMode="cover" />}
+                <Image style={styles.postImage} source={{ uri: member.image }} />
               </View>
             </TouchableHighlight>
             <View style={styles.postCaptionContainer}>

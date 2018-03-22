@@ -19,15 +19,67 @@ export default class ProfileScreen extends React.Component {
       },
     }
   }
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLiked: false,
+      isProfileLoading: true,
+      profile: null,
+
+    };
+  }
+  componentDidMount() {
+    //When the component is loaded
+    this.getProfile()
+  }
+  async getProfile() {
+
+    try {
+      let response = await fetch(`https://daug-app.herokuapp.com/api/users/6`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+      });
+
+      let responseJSON = null
+
+      if (response.status === 200) {
+
+        responseJSON = await response.json();
+        console.log(responseJSON)
+        this.setState({
+          isProfileLoading: false,
+          profile: responseJSON,
+        })
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ errors: responseJSON.errors })
+        Alert.alert('Unable to get your profile info', `Reason.. ${error}!`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, response: error })
+
+      console.log(error)
+
+      Alert.alert('Unable to get the profile info. Please try again later')
+    }
+  }
   render() {
+    const { isProfileLoading, profile } = this.state;
     return (
       <ScrollView style={{backgroundColor: '#fff'}}>
+        {!isProfileLoading &&
         <View style={styles.mainContainer}>
           <View style={styles.profileHeaderContainer}>
             <View style={styles.profileHeaderCoverContainer}>
               <Image
                 style={styles.coverImage}
-                source={COVER}
+                source={{uri: profile.banner_image}}
               />
             </View>
             <View style={styles.profileInfoContainer}>
@@ -35,13 +87,13 @@ export default class ProfileScreen extends React.Component {
                 <View style={styles.profileAvatarContainer}>
                   <Image
                     style={styles.avatarImage}
-                    source={AVATAR}
+                    source={{uri: profile.profile_image}}
                   />
                 </View>
                 <View style={styles.profileStatsEditContainer}>
                   <View style={styles.profileStatsContainer}>
                     <TouchableOpacity style={styles.profileStatsView}>
-                      <Text style={styles.profileStatsNumbers}>2</Text>
+                      <Text style={styles.profileStatsNumbers}>{profile.posts.length}</Text>
                       <Text style={styles.profileStatsText}>posts</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.profileStatsView}>
@@ -65,12 +117,24 @@ export default class ProfileScreen extends React.Component {
                 </View>
               </View>
               <View style={styles.profileInfoBottomContainer}>
-                <Text style={styles.profileName}>Bars</Text>
-                <Text style={styles.profileInfoText}>I love swimming!</Text>
+                <Text style={styles.profileName}>{profile.name}</Text>
+                <Text style={styles.profileInfoText}>{profile.bio}</Text>
               </View>
             </View>
           </View>
           <View style={styles.profilePostsContainer}>
+            
+            <View style={styles.profileLogoutContainer}>
+              {/* <Button
+                text = 'Post Details '
+                onPress={() => this.props.navigation.navigate('PostDetails')}
+                textStyle={styles.profileLogoutButtonText}
+                buttonStyle={styles.profileLogoutButton}
+              >  
+              </Button> */}
+              <Text style={styles.profileStatsNumbers}>{profile.posts.length} Posts</Text>
+
+            </View>
             <View style={styles.profileLogoutContainer}>
               <Button
                 text = 'Logout'
@@ -80,17 +144,9 @@ export default class ProfileScreen extends React.Component {
               >  
               </Button>
             </View>
-            {/* <View style={styles.profileLogoutContainer}>
-              <Button
-                text = 'Post Details '
-                onPress={() => this.props.navigation.navigate('PostDetails')}
-                textStyle={styles.profileLogoutButtonText}
-                buttonStyle={styles.profileLogoutButton}
-              >  
-              </Button>
-            </View> */}
           </View>
         </View>
+        }
       </ScrollView>
     );
   }
