@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Button } from 'react-native-elements'
 
-import COVER  from '../../assets/profile/cover.jpeg';
+import COVER from '../../assets/profile/cover.jpeg';
 import AVATAR from '../../assets/profile/avatar.jpeg';
 
 export default class ProfileScreen extends React.Component {
@@ -69,83 +69,120 @@ export default class ProfileScreen extends React.Component {
       Alert.alert('Unable to get the profile info. Please try again later')
     }
   }
+  _renderProfileBanner(image) {
+    if (image) {
+      return (
+        <Image
+          style={styles.coverImage}
+          source={{ uri: image }}
+        />
+      )
+    }
+    else {
+      return (
+        <View 
+          style={styles.defaultCoverImage}
+        >
+        </View>
+
+      )
+    }
+  }
+  _renderProfileImage(image) {
+    if(image) {
+      return (
+        <Image
+        style={styles.avatarImage}
+        source={{ uri: image }}
+      />      
+    )
+    }
+  }
+  _renderProfileName(name) {
+    if(name) {
+      return (
+        <Text style={styles.profileName}>{name}</Text>
+      )
+    }
+  }
+  _renderProfileBio(bio) {
+    if(bio) {
+      return (
+        <Text style={styles.profileInfoText}>{bio}</Text>
+      )
+    }
+  }
   render() {
     const { isProfileLoading, profile } = this.state;
     return (
-      <ScrollView style={{backgroundColor: '#fff'}}>
+      <ScrollView style={{ backgroundColor: '#fff' }}>
         {!isProfileLoading &&
-        <View style={styles.mainContainer}>
-          <View style={styles.profileHeaderContainer}>
-            <View style={styles.profileHeaderCoverContainer}>
-              <Image
-                style={styles.coverImage}
-                source={{uri: profile.banner_image}}
-              />
-            </View>
-            <View style={styles.profileInfoContainer}>
-              <View style={styles.profileInfoTopContainer}>
-                <View style={styles.profileAvatarContainer}>
-                  <Image
-                    style={styles.avatarImage}
-                    source={{uri: profile.profile_image}}
-                  />
-                </View>
-                <View style={styles.profileStatsEditContainer}>
-                  <View style={styles.profileStatsContainer}>
-                    <TouchableOpacity style={styles.profileStatsView}>
-                      <Text style={styles.profileStatsNumbers}>{profile.posts.length}</Text>
-                      <Text style={styles.profileStatsText}>posts</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.profileStatsView}>
-                      <Text style={styles.profileStatsNumbers}>1550</Text>
-                      <Text style={styles.profileStatsText}>followers</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.profileStatsView}>
-                      <Text style={styles.profileStatsNumbers}>250</Text>
-                      <Text style={styles.profileStatsText}>following</Text>
-                    </TouchableOpacity>
+          <View style={styles.mainContainer}>
+            <View style={styles.profileHeaderContainer}>
+              <View style={styles.profileHeaderBannerContainer}>
+              {this._renderProfileBanner(profile["banner_image"])}
+              </View>
+              <View style={styles.profileInfoContainer}>
+                <View style={styles.profileInfoTopContainer}>
+                  <View style={styles.profileAvatarContainer}>
+                    {this._renderProfileImage(profile["profile_image"])}
                   </View>
-                  <View style={styles.profileEditContainer}>
-                    <Button
-                      text='Edit Profile'
-                      buttonStyle={styles.profileEditButton}
-                      containerStyle={{ marginBottom: 10, marginTop:10 }}
-                      textStyle={styles.profileEditText}
-                      onPress={() => this.props.navigation.navigate('EditProfile')}
-                    />
+                  <View style={styles.profileStatsEditContainer}>
+                    <View style={styles.profileStatsContainer}>
+                      <TouchableOpacity style={styles.profileStatsView}>
+                        <Text style={styles.profileStatsNumbers}>{profile.posts.length}</Text>
+                        <Text style={styles.profileStatsText}>posts</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.profileStatsView}>
+                        <Text style={styles.profileStatsNumbers}>1550</Text>
+                        <Text style={styles.profileStatsText}>followers</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.profileStatsView}>
+                        <Text style={styles.profileStatsNumbers}>250</Text>
+                        <Text style={styles.profileStatsText}>following</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={styles.profileEditContainer}>
+                      <Button
+                        text='Edit Profile'
+                        buttonStyle={styles.profileEditButton}
+                        containerStyle={{ marginBottom: 10, marginTop: 10 }}
+                        textStyle={styles.profileEditText}
+                        onPress={() => this.props.navigation.navigate('EditProfile')}
+                      />
+                    </View>
                   </View>
                 </View>
-              </View>
-              <View style={styles.profileInfoBottomContainer}>
-                <Text style={styles.profileName}>{profile.name}</Text>
-                <Text style={styles.profileInfoText}>{profile.bio}</Text>
+                <View style={styles.profileInfoBottomContainer}>
+                  {this._renderProfileName(profile["name"])}
+                  {this._renderProfileBio(profile["bio"])}
+                </View>
               </View>
             </View>
-          </View>
-          <View style={styles.profilePostsContainer}>
-            
-            <View style={styles.profileLogoutContainer}>
-              {/* <Button
+            <View style={styles.profilePostsContainer}>
+
+              <View style={styles.profileLogoutContainer}>
+                {/* <Button
                 text = 'Post Details '
                 onPress={() => this.props.navigation.navigate('PostDetails')}
                 textStyle={styles.profileLogoutButtonText}
                 buttonStyle={styles.profileLogoutButton}
               >  
               </Button> */}
-              <Text style={styles.profileStatsNumbers}>{profile.posts.length} Posts</Text>
+                <Text style={styles.profileStatsNumbers}>{profile.posts.length} Posts</Text>
 
-            </View>
-            <View style={styles.profileLogoutContainer}>
-              <Button
-                text = 'Logout'
-                onPress={() => this.props.navigation.navigate('Intro')}
-                textStyle={styles.profileLogoutButtonText}
-                buttonStyle={styles.profileLogoutButton}
-              >  
-              </Button>
+              </View>
+              <View style={styles.profileLogoutContainer}>
+                <Button
+                  text='Logout'
+                  onPress={() => this.props.navigation.navigate('Intro')}
+                  textStyle={styles.profileLogoutButtonText}
+                  buttonStyle={styles.profileLogoutButton}
+                >
+                </Button>
+              </View>
             </View>
           </View>
-        </View>
         }
       </ScrollView>
     );
@@ -167,6 +204,11 @@ const styles = StyleSheet.create({
     height: 200,
     width: '100%',
   },
+  defaultCoverImage: {
+    backgroundColor: '#e1e8f2',
+    height: 200,
+    width: '100%',
+  },
   profileInfoContainer: {
     flex: 1,
   },
@@ -184,7 +226,7 @@ const styles = StyleSheet.create({
     width: 90,
     borderRadius: 45,
     borderWidth: 1,
-    borderColor: '#cccccc', 
+    borderColor: '#cccccc',
     marginTop: -40,
   },
   profileStatsEditContainer: {
@@ -195,13 +237,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  profileStatsView:{
+  profileStatsView: {
     flex: 1,
     marginTop: 10,
     justifyContent: 'center',
     alignItems: 'center'
   },
-  profileStatsNumbers :{
+  profileStatsNumbers: {
     fontSize: 16,
   },
   profileStatsText: {
@@ -226,8 +268,8 @@ const styles = StyleSheet.create({
   profileInfoBottomContainer: {
     height: 60,
     paddingLeft: 15,
-    justifyContent: 'space-between', 
-    paddingBottom: 10,   
+    justifyContent: 'space-between',
+    paddingBottom: 10,
   },
   profileName: {
     fontSize: 20,

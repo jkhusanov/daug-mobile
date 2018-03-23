@@ -65,6 +65,27 @@ export default class SocialFeedScreen extends React.Component {
       Alert.alert('Unable to get the feed. Please try again later')
     }
   }
+  _renderProfileImage(image) {
+    if(image) {
+      return (
+        <Image source={{ uri: image}} style={styles.avatar} />
+      )
+    }
+  }
+  _renderPostImage(image) {
+    if(image) {
+      return (
+        <Image style={styles.postImage} source={{ uri: image }} />
+      )
+    }
+  }
+  _renderPostDescription(description) {
+    if(description) {
+      return (
+        <Text style={styles.postCaption}> {description}</Text>
+      )
+    }
+  }
 
   _renderMembers(member){
     const { isFeedLoading, posts, user } = this.state;
@@ -79,7 +100,8 @@ export default class SocialFeedScreen extends React.Component {
           <View style={styles.postInfoTopContainer}>
             <View style={styles.postAuthorAvatarContainer}>
               <TouchableOpacity>
-                <Image source={{ uri: member.user.profile_image }} style={styles.avatar} />
+                {/* <Image source={{ uri: member.user.profile_image }} style={styles.avatar} /> */}
+                {this._renderProfileImage(member.user["profile_image"])}
               </TouchableOpacity>
             </View>
             <View style={styles.postAuthorInfoContainer}>
@@ -104,11 +126,14 @@ export default class SocialFeedScreen extends React.Component {
               }
             >
               <View style={styles.postImageContainer}>
-                <Image style={styles.postImage} source={{ uri: member.image }} />
+                {/* <Image style={styles.postImage} source={{ uri: member.image }} /> */}
+                {this._renderPostImage(member["image"])}
+
               </View>
             </TouchableHighlight>
             <View style={styles.postCaptionContainer}>
-              <Text style={styles.postCaption}> {member.description}</Text>
+              {/* <Text style={styles.postCaption}> {member.description}</Text> */}
+              {this._renderPostDescription(member["description"])}
             </View>
           </View>
           <View style={styles.postInfoBottomContainer}>
@@ -234,6 +259,7 @@ const styles = StyleSheet.create({
 
   },
   postContainer: {
+    backgroundColor: '#FAFAFA',
   },
   postImage: {
     width: '100%',
