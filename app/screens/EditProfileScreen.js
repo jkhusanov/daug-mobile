@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, SafeAreaView, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, SafeAreaView, KeyboardAvoidingView, Alert } from 'react-native';
 import { Button, Input, Header } from 'react-native-elements'
 
 
@@ -9,14 +9,87 @@ export default class EditProfileScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: 'Bars',
-      email: '',
-      password: '',
-      bio: 'I love swimming!',
+      isLoading: false,
+      name: 'Jahon',
+      bio: 'Hello World!'
     };
   }
+  
+  async DoneEditingPressed() {
+    this.setState({ isLoading: true })
+
+    const { name, bio, email, password, profileImage, bannerImage } = this.state
+    const { navigate } = this.props.navigation
+
+    var details = {
+      'name': name,
+      'bio': bio,
+    };
+
+    var formBody = [];
+
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+
+    formBody = formBody.join("&");
+
+    try {
+      let response = await fetch(`https://daug-app.herokuapp.com/api/users/6`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: formBody
+      });
+
+      let responseJSON = null
+
+      if (response.status === 200) {
+        responseJSON = await response.json();
+        console.log(responseJSON)
+
+        this.setState({ 
+          isLoading: false, 
+          profile: responseJSON, 
+        })
+        Alert.alert(
+          'Success!',
+          'Your profile is updated!',
+          [
+            { text: "Continue", onPress: () => this.props.navigation.goBack() }
+          ],
+          { cancelable: false }
+        )
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false, errors: responseJSON.errors })
+        Alert.alert('Cannot update it!', `Empty field.. ${error}!`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, response: error })
+
+      console.log(error)
+
+      Alert.alert('Updating failed!', 'Unable to Post. Please try again later')
+    }
+  }
+  _renderProfileName(name) {
+    if (name) {
+      return (
+        <Text>{name}</Text>
+      )
+    }
+  }
   render() {
-    const { name, email, password, bio } = this.state
+    const { name, email, password, bio, isLoading, profile } = this.state
     return (
       <View style={styles.profileEditContainer}>
         <SafeAreaView style={{ backgroundColor: '#FAFAFA', }}>
@@ -34,7 +107,7 @@ export default class EditProfileScreen extends React.Component {
               }
             }}
             rightComponent={
-              <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+              <TouchableOpacity onPress={() => this.DoneEditingPressed()}>
                 <Text style={styles.navBar}>Done</Text>
               </TouchableOpacity>
             }
@@ -42,62 +115,64 @@ export default class EditProfileScreen extends React.Component {
           />
         </SafeAreaView>
         <ScrollView style={{ backgroundColor: '#fff' }}>
-          <KeyboardAvoidingView behavior="position">
-            <View style={styles.mainContainer}>
-              <View style={styles.editInfoBasicContainer}>
-                <View style={styles.photoChangeContainer}>
-                  <View style={styles.avatarContainer}>
-                    <Image
-                      style={styles.avatarImage}
-                      source={AVATAR}
-                    />
+          {!isLoading &&
+            <KeyboardAvoidingView behavior="position">
+              <View style={styles.mainContainer}>
+                <View style={styles.editInfoBasicContainer}>
+                  <View style={styles.photoChangeContainer}>
+                    <View style={styles.avatarContainer}>
+                      <Image
+                        style={styles.avatarImage}
+                        source={AVATAR}
+                      />
+                    </View>
+                    <View style={styles.avatarChangeButtonContainer}>
+                      <TouchableOpacity>
+                        <Text style={styles.avatarChangeButton}>Change Photo</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
-                  <View style={styles.avatarChangeButtonContainer}>
-                    <TouchableOpacity>
-                      <Text style={styles.avatarChangeButton}>Change Photo</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-                <View style={styles.detailsChangeContainer}>
-                  <View style={styles.changeInputContainer}>
-                    <Text style={styles.inputLabel}>Name</Text>
-                    <Input
-                      placeholder='Input your name'
-                      placeholderTextColor="black"
-                      style={styles.inputStyle}
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      keyboardType="default"
-                      returnKeyType="done"
-                      value={name}
-                      onChangeText={(name) => this.setState({ name })}
-                      containerStyle={styles.inputElementsContainer}
-                    />
+                  <View style={styles.detailsChangeContainer}>
+                    <View style={styles.changeInputContainer}>
+                      <Text style={styles.inputLabel}>Name</Text>
+                      <Input
+                        placeholder='Input your name'
+                        placeholderTextColor="black"
+                        style={styles.inputStyle}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        keyboardType="default"
+                        returnKeyType="done"
+                        value={name}
+                        onChangeText={(name) => this.setState({ name })}
+                        containerStyle={styles.inputElementsContainer}
+                      />
 
+                    </View>
+                    <View style={styles.changeInputContainer}>
+                      <Text style={styles.inputLabel}>Bio</Text>
+                      <Input
+                        placeholder='Short info about you'
+                        placeholderTextColor="black"
+                        style={styles.inputStyle}
+                        autoCapitalize="none"
+                        autoCorrect={true}
+                        keyboardType="default"
+                        returnKeyType="done"
+                        value={bio}
+                        onChangeText={(bio) => this.setState({ bio })}
+                        containerStyle={styles.inputElementsContainer}
+                      />
+                    </View>
                   </View>
-                  <View style={styles.changeInputContainer}>
-                    <Text style={styles.inputLabel}>Bio</Text>
-                    <Input
-                      placeholder='Short info about you'
-                      placeholderTextColor="black"
-                      style={styles.inputStyle}
-                      autoCapitalize="none"
-                      autoCorrect={true}
-                      keyboardType="default"
-                      returnKeyType="done"
-                      value={bio}
-                      onChangeText={(bio) => this.setState({ bio })}
-                      containerStyle={styles.inputElementsContainer}
-                    />
-                  </View>
-                </View>
 
+                </View>
+                <View style={styles.editPrivateInfoContainer}>
+                  <Text style={styles.privateInfoLabel}>Private Information</Text>
+                </View>
               </View>
-              <View style={styles.editPrivateInfoContainer}>
-                <Text style={styles.privateInfoLabel}>Private Information</Text>
-              </View>
-            </View>
-          </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+          }
         </ScrollView>
       </View>
     );

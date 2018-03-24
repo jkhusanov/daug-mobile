@@ -25,6 +25,7 @@ export default class ProfileScreen extends React.Component {
       isLiked: false,
       isProfileLoading: true,
       profile: null,
+      user: 6,
 
     };
   }
@@ -62,7 +63,7 @@ export default class ProfileScreen extends React.Component {
         Alert.alert('Unable to get your profile info', `Reason.. ${error}!`)
       }
     } catch (error) {
-      this.setState({ isLoading: false, response: error })
+      this.setState({ isProfileLoading: false, response: error })
 
       console.log(error)
 
@@ -113,7 +114,7 @@ export default class ProfileScreen extends React.Component {
     }
   }
   render() {
-    const { isProfileLoading, profile } = this.state;
+    const { isProfileLoading, profile, user } = this.state;
     return (
       <ScrollView style={{ backgroundColor: '#fff' }}>
         {!isProfileLoading &&
@@ -148,7 +149,7 @@ export default class ProfileScreen extends React.Component {
                         buttonStyle={styles.profileEditButton}
                         containerStyle={{ marginBottom: 10, marginTop: 10 }}
                         textStyle={styles.profileEditText}
-                        onPress={() => this.props.navigation.navigate('EditProfile')}
+                        onPress={() => this.props.navigation.navigate('EditProfile', {user})}
                       />
                     </View>
                   </View>

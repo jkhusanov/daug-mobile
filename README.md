@@ -157,7 +157,7 @@ Social Feed screen is based on **Facebook**.
 - [x] Profile Screen - Make **`GET`** request to **`/api/users/:userId`** to get all the profile data
 	- [ ] :star: **Bonus:** Use `ActivityIndicator` to show placeholder loading when fetching profile data
 	- [ ] :star: **Bonus:** Use `DeviceEventEmitter` to trigger fetching profile data when the `user_profile_updated` event is emitted
-- [ ] Edit Profile Screen - Make **`PUT`** request to **`/api/users/:userId`** to update a user's profile information
+- [x] Edit Profile Screen - Make **`PUT`** request to **`/api/users/:userId`** to update a user's profile information
 	- [ ] :star: **Bonus:** Use `DeviceEventEmitter` to emit `user_profile_updated` event once user data is updated
 - [ ] Setup Authentication flow for app using `AsyncStorage`. Once the user has logged in then take them to home page each time they open the app again
 - [ ] Use Redux to share state between tab bar & screens
