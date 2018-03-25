@@ -218,6 +218,8 @@ router.post('api/posts/:postId/uncomment/:userId'); // DELETE
 - Serve as an React Native app that you can showcase on your porfolio
 
 ### TODO
+- [ ] Fix photo upload
+- [ ] Dynamically load user info 
 - [ ] Add Like, Comment and Follow API functionality
 - [ ] Clean up and format `README.MD` to showcase app - [follow this template](https://github.com/mobilespace/MobileGuides/blob/master/showcase_app_readme.md#readme-template-for-showcasing-a-mobile-app)
 - [ ] :star: **Bonus:** Add phone number UI to Edit Profile screen
