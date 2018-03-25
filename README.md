@@ -161,10 +161,11 @@ Social Feed screen is based on **Facebook**.
 	- [ ] :star: **Bonus:** Use `DeviceEventEmitter` to emit `user_profile_updated` event once user data is updated
 - [x] Setup Authentication flow for app using `AsyncStorage`. Once the user has logged in then take them to home page each time they open the app again
 - [ ] Use Redux to share state between tab bar & screens
-- [ ] Add working gif of app to `README.MD`
+- [x] Add working gif of app to `README.MD`
 
 ### Demo
 
+![assignment_2](https://github.com/jkhusanov/daug-mobile/blob/master/screenshots/demo-app-API.gif)
 
 ## Submission
 

@@ -122,7 +122,7 @@ export default class SocialFeedScreen extends React.Component {
           <View style={styles.postContainer}>
             <TouchableHighlight
               onPress={() =>
-                this.props.navigation.navigate('PostDetails', { post: member })
+                this.props.navigation.navigate('PostDetails', { postID: member.id })
               }
             >
               <View style={styles.postImageContainer}>
