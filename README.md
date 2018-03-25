@@ -141,6 +141,49 @@ Social Feed screen is based on **Facebook**.
   - `/signup` => `POST` = `( name, email, password )` => Used to create a new user
   - `/login` => `POST` = `( email, password )` => Used to validate an existing user
 
+```
+**Namespace:** `/auth`
+
+// User Authentication endpoints
+router.post('auth/signup'); // CREATE
+router.post('auth/login'); // VALIDATE / READ
+
+
+**Namespace:** `/api`
+
+// All data endpoints
+router.get('api/users/all'); // READ
+router.get('api/posts/all'); // READ
+
+// Social Feed endpoints
+router.get('api/feed'); // READ
+
+// User data endpoints
+router.get('api/users/:userId'); // READ
+router.put('api/users/:userId'); // UPDATE
+
+// Posts endpoints
+router.get('api/posts/:postId'); // READ
+router.post('api/users/:userId/posts'); // CREATE
+router.put('api/users/:userId/posts/:postId'); // UPDATE
+router.delete('api/users/:userId/posts/:postId'); // DELETE
+
+// Follower endpoints
+router.get('api/users/:userId/followers'); // READ
+router.get('api/users/:userId/following'); // READ
+router.post('api/users/:userId/follow/:followingId'); // CREATE
+router.post('api/users/:userId/unfollow/:followingId'); // DELETE
+
+// Like endpoints
+router.get('api/posts/:postId/likes'); // READ
+router.post('api/posts/:postId/like/:userId'); // CREATE
+router.post('api/posts/:postId/unlike/:userId'); // DELETE
+
+// Comment endpoints
+router.get('api/posts/:postId/comments'); // READ
+router.post('api/posts/:postId/comment/:userId'); // CREATE
+router.post('api/posts/:postId/uncomment/:userId'); // DELETE
+```
 ### TODO
 
 - [x] Intro Screen - Make simple **`GET`** request to **`/api`** to check server status
@@ -160,12 +203,29 @@ Social Feed screen is based on **Facebook**.
 - [x] Edit Profile Screen - Make **`PUT`** request to **`/api/users/:userId`** to update a user's profile information
 	- [ ] :star: **Bonus:** Use `DeviceEventEmitter` to emit `user_profile_updated` event once user data is updated
 - [x] Setup Authentication flow for app using `AsyncStorage`. Once the user has logged in then take them to home page each time they open the app again
-- [ ] Use Redux to share state between tab bar & screens
 - [x] Add working gif of app to `README.MD`
 
 ### Demo
 
 ![assignment_2](https://github.com/jkhusanov/daug-mobile/blob/master/screenshots/demo-app-API.gif)
+
+## Wrap up
+
+### Objectives
+
+- Add UI polish, tie up loose end and add remaining functionality
+- Update Readme with app details and publish Expo app for demo
+- Serve as an React Native app that you can showcase on your porfolio
+
+### TODO
+- [x] Add Like, Comment and Follow API functionality
+- [x] Clean up and format `README.MD` to showcase app - [follow this template](https://github.com/mobilespace/MobileGuides/blob/master/showcase_app_readme.md#readme-template-for-showcasing-a-mobile-app)
+- [ ] :star: **Bonus:** Add phone number UI to Edit Profile screen
+- [ ] :star: **Bonus:** Add Camera functionality to Create Post screen
+- [ ] :star: **Bonus:** Use Redux to share state between tab bar & screens
+- [x] Add working gif of app to `README.MD`
+
+### Demo
 
 ## Submission
 
@@ -177,4 +237,4 @@ In case you run into any problems or issues, please post it on #questions channe
 
 ## Finally
 
-For any other questions about this repo or MobileSpace in general please reach out to [**@monte9**](https://github.com/monte9) on Github.
+For any other questions about this repo or MobileSpace in general please reach out to [**@jkhusanov**](https://github.com/jkhusanov) on Github.
