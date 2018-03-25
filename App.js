@@ -1,15 +1,38 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { isSignedIn } from "./app/utils/auth";
 
-import RootNavigator from './app/navigation/RootNavigator';
-import PostDetailsScreen from './app/screens/PostDetailsScreen';
-import SocialNavigator from './app/navigation/SocialNavigator';
+
+import {createRootNavigator} from './app/navigation/RootNavigator';
+
 
 export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      signedIn: false,
+      checkedSignIn: false
+    };
+  }
+  componentWillMount() {
+    isSignedIn()
+      .then(res => this.setState({ signedIn: res, checkedSignIn: true }))
+      .catch(err => alert("An error occurred"));
+  }
   render() {
+    const { checkedSignIn, signedIn } = this.state;
+    // If we haven't checked AsyncStorage yet, don't render anything (better ways to do this)
+    if (!checkedSignIn) {
+      return null;
+    }
+    const Layout = createRootNavigator(signedIn);
     return (
-      <RootNavigator/>
+      <Layout />
     );
+    // return (
+    //   <RootNavigator/>
+    // );
   }
 }
 

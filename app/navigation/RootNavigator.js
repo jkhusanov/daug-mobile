@@ -3,20 +3,27 @@ import IntroStack from './IntroStack';
 import HomeTabs from './HomeTabs';
 
 
+export const createRootNavigator = (signedIn = false) => {
+  return StackNavigator(
+    {
+      Intro: {
+        screen: IntroStack,
+        navigationOptions: {
+          gesturesEnabled: false
+        }
+      },
+      Home: {
+        screen: HomeTabs,
+        navigationOptions: {
+          gesturesEnabled: false
+        }
+      }
+    },
+    {
+      headerMode: "none",
+      mode: "modal",
+      initialRouteName: signedIn ? "Home" : "Intro"
+    }
 
-export default StackNavigator({
-  Intro: {
-    screen: IntroStack,
-  },
-  Home: {
-    screen: HomeTabs,
-  },
-
-}, {
-  initialRouteName: 'Home',
-  mode: 'modal',
-  headerMode: 'none',
-  navigationOptions: {
-    gesturesEnabled: false,
-  },
-});
+  );
+}

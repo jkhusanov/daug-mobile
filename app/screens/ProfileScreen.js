@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Button } from 'react-native-elements'
+import { onSignOut } from "../utils/auth";
+
 
 import COVER from '../../assets/profile/cover.jpeg';
 import AVATAR from '../../assets/profile/avatar.jpeg';
@@ -176,7 +178,7 @@ export default class ProfileScreen extends React.Component {
               <View style={styles.profileLogoutContainer}>
                 <Button
                   text='Logout'
-                  onPress={() => this.props.navigation.navigate('Intro')}
+                  onPress={() =>  onSignOut().then(() => this.props.navigation.navigate('Intro'))}
                   textStyle={styles.profileLogoutButtonText}
                   buttonStyle={styles.profileLogoutButton}
                 >

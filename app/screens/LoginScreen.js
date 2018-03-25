@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, Keyboard } from
 import { LinearGradient } from 'expo';
 import { MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
 import { Button, Input } from 'react-native-elements';
+import { onSignIn } from "../utils/auth";
+
 
 import SocialFeedScreen from './SocialFeedScreen';
 
@@ -64,7 +66,7 @@ export default class LoginScreen extends React.Component {
           'Welcome back!',
           'You have successfully logged in your account!',
           [
-            { text: "Continue", onPress: () => navigate("Home") }
+            { text: "Continue", onPress: () => {onSignIn().then(() => navigate("Home")); }}
           ],
           { cancelable: false }
         )

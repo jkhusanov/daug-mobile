@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, Keyboard } from
 import { LinearGradient } from 'expo';
 import { MaterialCommunityIcons, SimpleLineIcons, Feather } from '@expo/vector-icons';
 import { Button, Input } from 'react-native-elements';
+import { onSignIn } from "../utils/auth";
+
 
 export default class SignupScreen extends React.Component {
   static navigationOptions = {
@@ -65,7 +67,7 @@ export default class SignupScreen extends React.Component {
           'Welcome to our app!',
           'You have successfully created new account!',
           [
-            { text: "Continue", onPress: () => navigate("Home") }
+            { text: "Continue", onPress: () => {onSignIn().then(() => navigate("Home")); }}
           ],
           { cancelable: false }
         )
