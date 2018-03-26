@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableHighlight, TouchableOpacity, Image, ScrollView, StatusBar } from 'react-native';
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { Button, Icon } from 'react-native-elements';
-import { SOCIAL_FEED_MOCK_DATA } from '../utils/constants';
+import { ENV_URL, getUserId } from '../utils/auth';
 
 export default class SocialFeedScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -27,11 +27,21 @@ export default class SocialFeedScreen extends React.Component {
   componentDidMount() {
     //When the component is loaded
     this.getFeed()
+    //getting user ID from AsyncStorage 
+    getUserId()
+    .then(res => {
+      this.setState({ userId: res })
+      this.fetchUser()
+    })
+    .catch(err => {
+      alert("An error occurred")
+    });
   }
+  //Getting feed
   async getFeed() {
 
     try {
-      let response = await fetch(`https://daug-app.herokuapp.com/api/feed`, {
+      let response = await fetch(`${ENV_URL}/api/feed`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -63,6 +73,34 @@ export default class SocialFeedScreen extends React.Component {
       console.log(error)
 
       Alert.alert('Unable to get the feed. Please try again later')
+    }
+  }
+
+  //Getting user id
+  async fetchUser() {
+    this.setState({ isLoading: true });
+
+    try {
+      let response = await fetch(`${ENV_URL}/api/users/${this.state.userId}`, {
+        method: 'GET'
+      });
+
+      let responseJSON = null
+
+      if (response.status === 200) {
+        responseJSON = await response.json();
+
+        console.log(responseJSON);
+
+        this.setState({ user: responseJSON, isLoading: false })
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log("failed" + error);
+      }
+    } catch (error) {
+      console.log("failed" + error);
     }
   }
   _renderProfileImage(image) {
@@ -107,7 +145,7 @@ export default class SocialFeedScreen extends React.Component {
             <View style={styles.postAuthorInfoContainer}>
               <View style={styles.nameContainer}>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Profile', { isHeaderShow: true, user: member.user })}
+                  onPress={() => this.props.navigation.navigate('Profile', { isHeaderShow: true, userId: member.user.id })}
                 >
                   <Text style={styles.nameLabel}>{member.user.name}</Text>
                 </TouchableOpacity>
@@ -189,7 +227,7 @@ export default class SocialFeedScreen extends React.Component {
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.createPostContainer}>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost')}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost', { member: user })}>
               <Text style={styles.createPostLabel}>Create Post</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost')}>

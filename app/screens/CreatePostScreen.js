@@ -3,31 +3,48 @@ import { StyleSheet, View, TextInput, Text, TouchableOpacity, Image, SafeAreaVie
 import { Button, Icon, Header } from 'react-native-elements';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { ImagePicker } from 'expo';
+import { RNS3 } from 'react-native-aws3';
 
-
-import AVATAR from '../../assets/profile/avatar.jpeg';
+import { ENV_URL, getUserId } from '../utils/auth';
 
 export default class CreatePostScreen extends React.Component {
   constructor(props) {
     super(props);
+    const { member } = props.navigation.state.params
+
     this.state = {
-      text: '',
-      name: 'Bars',
       location: ' Add Location',
       image: null,
+      member,
+      newPostContent: '',
     };
+  }
+
+  
+  async componentDidMount() {
+    //getting user ID
+    getUserId()
+    .then(res => this.setState({ userId: res }))
+    .catch(err => { console.log(err); alert("An error occurred")});
   }
 
   async createPostPressed() {
     this.setState({ isLoading: true })
 
-    const { text, image } = this.state
+    const { text, image, newPostContent } = this.state
     const { navigate } = this.props.navigation
 
+
     var details = {
-      'description': text,
-      'image': image
+
     };
+    if (image !== null) {
+      details.image = image
+    }
+    if (newPostContent !== null && newPostContent.length > 0) {
+      details.description = newPostContent
+    }
+
 
     var formBody = [];
 
@@ -41,7 +58,7 @@ export default class CreatePostScreen extends React.Component {
     formBody = formBody.join("&");
 
     try {
-      let response = await fetch(`https://daug-app.herokuapp.com/api/users/6/posts`, {
+      let response = await fetch(`${ENV_URL}/api/users/${this.state.userId}/posts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -88,7 +105,7 @@ export default class CreatePostScreen extends React.Component {
     });
 
     if (result.cancelled) {
-      console.log('got here');
+      console.log('Profile Image cancelled');
       return;
     }
 
@@ -97,7 +114,7 @@ export default class CreatePostScreen extends React.Component {
         {
           offset: { x: 0, y: 0 },
           size: { width: result.width, height: result.height },
-          displaySize: { width: 50, height: 50 },
+          displaySize: { width: result.width, height: result.height },
           resizeMode: 'contain',
         },
         (uri) => resolve(uri),
@@ -105,10 +122,36 @@ export default class CreatePostScreen extends React.Component {
       );
     });
 
-    this.setState({ image: resizedUri });
+    // this gives you a rct-image-store URI or a base64 image tag that
+    // you can use from ImageStore
+
+    const file = {
+      // `uri` can also be a file system path (i.e. file://)
+      uri: resizedUri,
+      name: `user_${this.state.member.id}_post_${new Date().getTime()}.png`,
+      type: "image/png"
+    }
+
+    const options = {
+      keyPrefix: "uploads/",
+      bucket: "daug",
+      region: "us-east-1",
+      accessKey: "AKIAIKG2UJ7AHBKJ5N2Q",
+      secretKey: "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",
+      successActionStatus: 201
+    }
+
+    RNS3.put(file, options).then(response => {
+      if (response.status !== 201)
+        throw new Error("Failed to upload image to S3");
+
+      console.log(response.body);
+
+      this.setState({ image: response.body.postResponse.location });
+    });
   };
   render() {
-    const { text, name, location, image } = this.state
+    const { newPostContent, location, image, member } = this.state
     return (
       <View style={styles.createPostContainer}>
         <SafeAreaView style={{ backgroundColor: '#FAFAFA', }}>
@@ -137,13 +180,13 @@ export default class CreatePostScreen extends React.Component {
           <View style={styles.postInfoContainer}>
             <View style={styles.postAuthorAvatarContainer}>
               <TouchableOpacity>
-                <Image source={AVATAR} style={styles.avatar} />
+                <Image source={{ uri: member.profile_image || '' }} style={styles.avatar} />
               </TouchableOpacity>
             </View>
             <View style={styles.postAuthorInfoContainer}>
               <View style={styles.nameContainer}>
                 <TouchableOpacity>
-                  <Text style={styles.nameLabel}>{name}</Text>
+                  <Text style={styles.nameLabel}>{member.name}</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.locationContainer}>
@@ -167,14 +210,14 @@ export default class CreatePostScreen extends React.Component {
                 placeholder={"Share your thoughts!"}
                 placeholderTextColor={'gray'}
                 multiline={true}
-                onChangeText={(text) => this.setState({ text })}
-                value={text}
+                value={newPostContent}
+                onChangeText={(text) => this.setState({ newPostContent: text })}
                 style={styles.postTextInput}
               />
             </View>
           </KeyboardAvoidingView >
           <View style={styles.uploadImageContainer}>
-            <TouchableOpacity onPress={this._pickImage}>
+            <TouchableOpacity onPress={() => this._pickImage()}>
               <Ionicons
                 name='md-image'
                 size={50}

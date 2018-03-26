@@ -67,7 +67,7 @@ export default class SignupScreen extends React.Component {
           'Welcome to our app!',
           'You have successfully created new account!',
           [
-            { text: "Continue", onPress: () => {onSignIn().then(() => navigate("Home")); }}
+            { text: "Continue", onPress: () => {onSignIn(responseJSON.user.id).then(() => navigate("Home")); }}
           ],
           { cancelable: false }
         )
