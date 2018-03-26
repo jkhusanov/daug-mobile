@@ -17,15 +17,16 @@ export default class CreatePostScreen extends React.Component {
       image: null,
       member,
       newPostContent: '',
+      imageTake: null,
     };
   }
 
-  
+
   async componentDidMount() {
     //getting user ID
     getUserId()
-    .then(res => this.setState({ userId: res }))
-    .catch(err => { console.log(err); alert("An error occurred")});
+      .then(res => this.setState({ userId: res }))
+      .catch(err => { console.log(err); alert("An error occurred") });
   }
 
   async createPostPressed() {
@@ -150,6 +151,42 @@ export default class CreatePostScreen extends React.Component {
       this.setState({ image: response.body.postResponse.location });
     });
   };
+  returnImage(image) {
+    this.setState({image: image})
+    console.log(image)
+
+    const file = {
+      // `uri` can also be a file system path (i.e. file://)
+      uri: image,
+      name: `user_${this.state.member.id}_post_${new Date().getTime()}.png`,
+      type: "image/png"
+    }
+
+    const options = {
+      keyPrefix: "uploads/",
+      bucket: "daug",
+      region: "us-east-1",
+      accessKey: "AKIAIKG2UJ7AHBKJ5N2Q",
+      secretKey: "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",
+      successActionStatus: 201
+    }
+
+    RNS3.put(file, options).then(response => {
+      if (response.status !== 201)
+        throw new Error("Failed to upload image to S3");
+
+      console.log(response.body);
+
+      this.setState({ image: response.body.postResponse.location });
+    });
+  }
+  _renderProfileImage(image) {
+    if(image) {
+      return (
+        <Image source={{ uri: image}} style={styles.avatar} />
+      )
+    }
+  }
   render() {
     const { newPostContent, location, image, member } = this.state
     return (
@@ -180,13 +217,13 @@ export default class CreatePostScreen extends React.Component {
           <View style={styles.postInfoContainer}>
             <View style={styles.postAuthorAvatarContainer}>
               <TouchableOpacity>
-                <Image source={{ uri: member.profile_image || '' }} style={styles.avatar} />
+                {this._renderProfileImage(member["profile_image"])}
               </TouchableOpacity>
             </View>
             <View style={styles.postAuthorInfoContainer}>
               <View style={styles.nameContainer}>
                 <TouchableOpacity>
-                  <Text style={styles.nameLabel}>{member.name}</Text>
+                  <Text style={styles.nameLabel}>{member && member.name}</Text>
                 </TouchableOpacity>
               </View>
               <View style={styles.locationContainer}>
@@ -203,7 +240,32 @@ export default class CreatePostScreen extends React.Component {
               </View>
             </View>
           </View>
+          <View style={styles.imageShareContainer}>
+              <View style={styles.uploadImageContainer}>
+                <TouchableOpacity onPress={() => this._pickImage()}>
+                  <Ionicons
+                    name='md-image'
+                    size={45}
+                    color='#2F80ED'
+                    style={styles.photoPostIcon}
+                  />
+                  <Text style={styles.photoLabel}>Upload from library</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.uploadImageContainer}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('TakePhoto', {returnImage: this.returnImage.bind(this)})}>
+                  <Ionicons
+                    name='ios-camera'
+                    size={45}
+                    color='#2F80ED'
+                    style={styles.photoPostIcon}
+                  />
+                  <Text style={styles.photoLabel}>Take a photo</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           <KeyboardAvoidingView behavior="height">
+
             <View style={styles.textInputContainer}>
               <TextInput
                 editable={true}
@@ -216,17 +278,6 @@ export default class CreatePostScreen extends React.Component {
               />
             </View>
           </KeyboardAvoidingView >
-          <View style={styles.uploadImageContainer}>
-            <TouchableOpacity onPress={() => this._pickImage()}>
-              <Ionicons
-                name='md-image'
-                size={50}
-                color='#2F80ED'
-                style={styles.photoPostIcon}
-              />
-              <Text style={styles.photoLabel}>Upload from library</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </View>
     );
@@ -295,6 +346,12 @@ const styles = StyleSheet.create({
   },
   photoPostIcon: {
     alignSelf: 'center',
+  },
+  imageShareContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+
   }
 
 });

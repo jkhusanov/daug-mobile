@@ -230,7 +230,7 @@ export default class SocialFeedScreen extends React.Component {
             <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost', { member: user })}>
               <Text style={styles.createPostLabel}>Create Post</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost')}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost',  { member: user })}>
               <Icon
                 name='picture'
                 type='simple-line-icon'

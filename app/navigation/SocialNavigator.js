@@ -1,6 +1,7 @@
 import { StackNavigator } from 'react-navigation';
 import CreatePostScreen from '../screens/CreatePostScreen';
 import SocialStack from './SocialStack';
+import TakePhotoScreen from '../screens/TakePhotoScreen';
 
 const SocialNavigator = StackNavigator({
   SocialStack: {
@@ -9,6 +10,9 @@ const SocialNavigator = StackNavigator({
   CreatePost: {
     screen: CreatePostScreen,
   },
+  TakePhoto: {
+    screen: TakePhotoScreen,
+  }
 }, {
   initialRouteName: 'SocialStack',
   mode: 'modal',
