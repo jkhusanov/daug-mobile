@@ -114,7 +114,6 @@ export default class PostDetailsScreen extends React.Component {
     return (
       <View style={styles.commentContainer} key={index}>
         <TouchableOpacity>
-          {/* <Image source={{ uri: comment.user.profile_image || '' }} style={styles.commentAvatar} /> */}
           {this._renderCommentAvatar(comment.user["profile_image"])}
         </TouchableOpacity>
         <View style={styles.postUsernameLocationContainer}>
@@ -128,7 +127,7 @@ export default class PostDetailsScreen extends React.Component {
       </View>
     )
   }
-  //Rendering comments and loading them from displayComments
+  //Rendering comments and loading them from displayComment
   renderComments() {
     const { comments } = this.state.member
 
@@ -217,7 +216,7 @@ export default class PostDetailsScreen extends React.Component {
       <View style={styles.commentsContainer}>
         <View style={styles.commentContainer}>
           <Icon
-            name='comments'
+            name='comments-o'
             color='#666666'
             type="font-awesome"
             size={25}
@@ -236,6 +235,108 @@ export default class PostDetailsScreen extends React.Component {
         </View>
       </View>
     )
+  }
+  //Posting new like 
+  async postLike() {
+    const { postId, user } = this.state
+    
+      try {
+        let response = await fetch(`${ENV_URL}/api/posts/${postId}/like/${user.id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          },
+          body: null
+        });
+  
+        let responseJSON = null
+  
+        if (response.status === 201) {
+          responseJSON = await response.json();
+  
+          console.log(responseJSON)
+  
+          this.fetchPost()
+          this.setState({ liked: true })
+  
+          Alert.alert(
+            'You liked this post!',
+            '',
+            [
+              {
+                text: "Dismiss", onPress: () => {
+                  console.log("liked!")
+                }
+              }
+            ],
+            { cancelable: false }
+          )
+        } else {
+          responseJSON = await response.json();
+          const error = responseJSON.message
+  
+          console.log(responseJSON)
+  
+          this.setState({ isLoading: false, errors: responseJSON.errors, comment: null })
+  
+          Alert.alert('1 Unable to like post! ', `${error}`)
+        }
+      } catch (error) {
+        this.setState({ isLoading: false, error, comment: null })
+  
+        Alert.alert('1.2 Unable to like post! ', `${error}`)
+      }    
+  }
+  async postUnLike(){
+    const { postId, user } = this.state
+
+    try {
+      let response = await fetch(`${ENV_URL}/api/posts/${postId}/unlike/${user.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: null
+      });
+
+      let responseJSON = null
+
+      if (response.status === 200) {
+        responseJSON = await response.json();
+
+        console.log(responseJSON)
+
+        this.fetchPost()
+        this.setState({ liked: false })
+
+        Alert.alert(
+          '*** You unliked this post!',
+          '',
+          [
+            {
+              text: "Dismiss", onPress: () => {
+                console.log("unliked!")
+
+              }
+            }
+          ],
+          { cancelable: false }
+        )
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false, errors: responseJSON.errors, comment: null })
+
+        Alert.alert('2 Unable to unlike post! ', `${error}`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, error, comment: null })
+
+      Alert.alert('2.1 Unable to unlike post! ', `${error}`)
+    }
   }
   //loading circle 
   loadingView() {
@@ -327,7 +428,8 @@ export default class PostDetailsScreen extends React.Component {
               <Text style={styles.postDate}>{member && member.createdAt}</Text>
             </View>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => liked === false ? this.postLike() : this.postUnLike()}>
+              {/* <TouchableOpacity onPress={() =>  this.postLike()}> */}
                 <Icon
                   name='heart-o'
                   type='font-awesome'
@@ -335,11 +437,11 @@ export default class PostDetailsScreen extends React.Component {
                   size={25}
                 />
               </TouchableOpacity>
-              <Text style={styles.postActionText}>250</Text>
+              <Text style={styles.postActionText}>{member.likes.length}</Text>
             </View>
           </View>
         </View>
-        <Text style={styles.sectionLabel}>{member.comments ? member.comments.length : 'NO'} Comments</Text>
+        <Text style={styles.sectionLabel}>{member.comments ? member.comments.length : 'NO'} Comment{member.comments.length !== 1 ? 's' : ''}</Text>
         {member.comments && this.renderComments()}
         {this.renderAddComment()}
       </Component>

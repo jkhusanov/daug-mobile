@@ -193,25 +193,25 @@ export default class SocialFeedScreen extends React.Component {
             >
             <View style={styles.postCommentContainer}>
               <Icon
-                name='comments'
+                name='comments-o'
                 type='font-awesome'
                 size={25}
                 color='#666666'
               />
-              <Text style={styles.postActionText}>10</Text>
+              <Text style={styles.postActionText}>{member.comments.length}</Text>
             </View>
             </TouchableOpacity>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
               <TouchableOpacity
                 onPress={() => { console.log('like pressed'), this.setState({ isLiked: true }), console.log('and applied', { isLiked }) }}>
                 <Icon
-                  name='heart'
+                  name='heart-o'
                   type='font-awesome'
-                  color={'red'}
+                  color={'black'}
                   size={25}
                 />
               </TouchableOpacity>
-              <Text style={styles.postActionText}>250</Text>
+              <Text style={styles.postActionText}>{member.likes.length}</Text>
             </View>
           </View>
         </View>
