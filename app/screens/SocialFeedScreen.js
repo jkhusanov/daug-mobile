@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableHighlight, TouchableOpacity, Image, ScrollView, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableHighlight, TouchableOpacity, Image, ScrollView, StatusBar, Alert } from 'react-native';
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { Button, Icon } from 'react-native-elements';
 import { ENV_URL, getUserId } from '../utils/auth';
@@ -17,10 +17,10 @@ export default class SocialFeedScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLiked: false,
+      liked: false,
       isFeedLoading: true,
       posts: null,
-
+      postId: null,
     };
   }
 
@@ -39,7 +39,7 @@ export default class SocialFeedScreen extends React.Component {
   }
   //Getting feed
   async getFeed() {
-
+    const {postId} = this.state
     try {
       let response = await fetch(`${ENV_URL}/api/feed`, {
         method: 'GET',
@@ -103,6 +103,109 @@ export default class SocialFeedScreen extends React.Component {
       console.log("failed" + error);
     }
   }
+  //Posting new like 
+  async postLike() {
+    const { postId, user, posts } = this.state
+      
+      try {
+        let response = await fetch(`${ENV_URL}/api/posts/${postId}/like/${user.id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          },
+          body: null
+        });
+  
+        let responseJSON = null
+  
+        if (response.status === 201) {
+          responseJSON = await response.json();
+  
+          console.log(responseJSON)
+  
+          this.fetchPost()
+          this.setState({ liked: true })
+  
+          Alert.alert(
+            'You liked this post!',
+            '',
+            [
+              {
+                text: "Dismiss", onPress: () => {
+                  console.log("liked!")
+                }
+              }
+            ],
+            { cancelable: false }
+          )
+        } else {
+          responseJSON = await response.json();
+          const error = responseJSON.message
+  
+          console.log(responseJSON)
+  
+          this.setState({ isLoading: false, errors: responseJSON.errors, comment: null })
+  
+          Alert.alert('1 Unable to like post! ', `${error}`)
+        }
+      } catch (error) {
+        this.setState({ isLoading: false, error, comment: null })
+  
+        Alert.alert('1.2 Unable to like post! ', `${error}`)
+      }    
+  }
+  // Posting new unlike
+  async postUnLike(){
+    const { postId, user } = this.state
+
+    try {
+      let response = await fetch(`${ENV_URL}/api/posts/${postId}/unlike/${user.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: null
+      });
+
+      let responseJSON = null
+
+      if (response.status === 200) {
+        responseJSON = await response.json();
+
+        console.log(responseJSON)
+
+        this.fetchPost()
+        this.setState({ liked: false })
+
+        Alert.alert(
+          '*** You unliked this post!',
+          '',
+          [
+            {
+              text: "Dismiss", onPress: () => {
+                console.log("unliked!")
+
+              }
+            }
+          ],
+          { cancelable: false }
+        )
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false, errors: responseJSON.errors, comment: null })
+
+        Alert.alert('2 Unable to unlike post! ', `${error}`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, error, comment: null })
+
+      Alert.alert('2.1 Unable to unlike post! ', `${error}`)
+    }
+  }
   _renderProfileImage(image) {
     if(image) {
       return (
@@ -134,7 +237,7 @@ export default class SocialFeedScreen extends React.Component {
   }
 
   _renderMembers(member){
-    const { isFeedLoading, posts, user } = this.state;
+    const { isFeedLoading, user, liked, } = this.state;
 
     return (
       <View>
@@ -202,12 +305,12 @@ export default class SocialFeedScreen extends React.Component {
             </View>
             </TouchableOpacity>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
-              <TouchableOpacity
-                onPress={() => { console.log('like pressed'), this.setState({ isLiked: true }), console.log('and applied', { isLiked }) }}>
+            {/* <TouchableOpacity onPress={() => liked === false ? this.postLike() : this.postUnLike()}> */}
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('PostDetails', { postId: member.id })}>
                 <Icon
-                  name='heart-o'
+                  name= {liked ? 'heart' : 'heart-o'}
                   type='font-awesome'
-                  color={'black'}
+                  color={liked ? 'red' : 'black'}
                   size={25}
                 />
               </TouchableOpacity>
@@ -229,13 +332,13 @@ export default class SocialFeedScreen extends React.Component {
         extraData={this.state}
         keyExtractor={(item, index) => index}
         renderItem={({ item }) => this._renderMembers(item)}
-      />
+      /> 
     }
   </View>
     )
   }
   render() {
-    const { isFeedLoading, posts, user } = this.state;
+    const { isFeedLoading, user, postId, posts } = this.state;
 
     return (
       <View style={styles.container}>

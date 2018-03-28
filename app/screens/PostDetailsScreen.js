@@ -287,6 +287,7 @@ export default class PostDetailsScreen extends React.Component {
         Alert.alert('1.2 Unable to like post! ', `${error}`)
       }    
   }
+  // Posting new unlike
   async postUnLike(){
     const { postId, user } = this.state
 
@@ -431,9 +432,9 @@ export default class PostDetailsScreen extends React.Component {
               <TouchableOpacity onPress={() => liked === false ? this.postLike() : this.postUnLike()}>
               {/* <TouchableOpacity onPress={() =>  this.postLike()}> */}
                 <Icon
-                  name='heart-o'
+                  name= {liked ? 'heart' : 'heart-o'}
                   type='font-awesome'
-                  color='black'
+                  color={liked ? 'red' : 'black'}
                   size={25}
                 />
               </TouchableOpacity>
