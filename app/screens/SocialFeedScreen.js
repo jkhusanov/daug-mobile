@@ -109,11 +109,19 @@ export default class SocialFeedScreen extends React.Component {
         <Image source={{ uri: image}} style={styles.avatar} />
       )
     }
+    else {
+      return (
+        <View
+          style={styles.defaultProfileAvatar}
+        >
+        </View>
+      )
+    }
   }
   _renderPostImage(image) {
     if(image) {
       return (
-        <Image style={styles.postImage} source={{ uri: image }} />
+        <Image style={styles.postImage} source={{ uri: image }} resizeMode="cover" />
       )
     }
   }
@@ -158,26 +166,31 @@ export default class SocialFeedScreen extends React.Component {
             </View>
           </View>
           <View style={styles.postContainer}>
-            <TouchableHighlight
+            <TouchableOpacity
               onPress={() =>
-                this.props.navigation.navigate('PostDetails', { postID: member.id })
-              }
+                this.props.navigation.navigate('PostDetails', { postId: member.id })
+              } 
+              activeOpacity = {0.9}
             >
               <View style={styles.postImageContainer}>
-                {/* <Image style={styles.postImage} source={{ uri: member.image }} /> */}
                 {this._renderPostImage(member["image"])}
-
               </View>
-            </TouchableHighlight>
-            <View style={styles.postCaptionContainer}>
-              {/* <Text style={styles.postCaption}> {member.description}</Text> */}
+              <View style={styles.postCaptionContainer}>
               {this._renderPostDescription(member["description"])}
             </View>
+            </TouchableOpacity>
+
           </View>
           <View style={styles.postInfoBottomContainer}>
             <View style={styles.postDataContainer}>
               <Text style={styles.postDate}>{member.createdAt}</Text>
             </View>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('PostDetails', { postId: member.id })
+              } 
+              activeOpacity = {0.9}
+            >
             <View style={styles.postCommentContainer}>
               <Icon
                 name='comments'
@@ -187,6 +200,7 @@ export default class SocialFeedScreen extends React.Component {
               />
               <Text style={styles.postActionText}>10</Text>
             </View>
+            </TouchableOpacity>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
               <TouchableOpacity
                 onPress={() => { console.log('like pressed'), this.setState({ isLiked: true }), console.log('and applied', { isLiked }) }}>
@@ -301,12 +315,12 @@ const styles = StyleSheet.create({
   },
   postImage: {
     width: '100%',
-    height: 230,
+    height: 250,
   },
   postCaption: {
     margin: 10,
     color: '#44484B',
-    fontSize: 15,
+    fontSize: 18,
   },
   postInteractionContainer: {
 
@@ -362,8 +376,15 @@ const styles = StyleSheet.create({
   photoPostIcon: {
     marginRight: 20,
     color: '#ff99cc',
-
-  }
+  },
+  defaultProfileAvatar: {
+    height: 45,
+    width: 45,
+    borderRadius: 22,
+    marginLeft: 5,
+    borderColor: '#aaaaaa',
+    borderWidth: 0.5,
+  },
 
 
 

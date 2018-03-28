@@ -11,7 +11,6 @@ export default class CreatePostScreen extends React.Component {
   constructor(props) {
     super(props);
     const { member } = props.navigation.state.params
-
     this.state = {
       location: ' Add Location',
       image: null,

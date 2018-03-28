@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, ActivityIndicator, Alert } from 'react-native';
 import { Button, Icon, Input } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -19,7 +19,7 @@ export default class PostDetailsScreen extends React.Component {
   constructor(props) {
     super(props);
     const postId = props.navigation.state.params && props.navigation.state.params.postId
-
+    console.log("Correct post ID: " + postId)
     this.state = {
       postId: postId || null,
       member: null,
@@ -27,7 +27,7 @@ export default class PostDetailsScreen extends React.Component {
       comment: null,
     };
   }
-  async componentDidMount() {
+  async componentWillMount() {
 
     const { postId } = this.state
 
@@ -59,6 +59,7 @@ export default class PostDetailsScreen extends React.Component {
 
     this.setState({ fontLoaded: true });
   }
+
   async fetchPost() {
     this.setState({ isLoading: true });
     const { postId } = this.state
@@ -76,10 +77,10 @@ export default class PostDetailsScreen extends React.Component {
       } else {
         const error = responseJSON.message
 
-        console.log("failed" + error);
+        console.log("failed: " + error);
       }
     } catch (error) {
-      console.log("failed" + error);
+      console.log("failed: " + error);
     }
   }
   async fetchUser() {
@@ -102,18 +103,19 @@ export default class PostDetailsScreen extends React.Component {
         responseJSON = await response.json();
         const error = responseJSON.message
 
-        console.log("failed" + error);
+        console.log("failed: " + error);
       }
     } catch (error) {
-      console.log("failed" + error);
+      console.log("failed: " + error);
     }
   }
 
-  displayComments(comment, index) {
+  displayComment(comment, index) {
     return (
       <View style={styles.commentContainer} key={index}>
         <TouchableOpacity>
-          <Image source={{ uri: comment.user.profile_image || '' }} style={styles.commentAvatar} />
+          {/* <Image source={{ uri: comment.user.profile_image || '' }} style={styles.commentAvatar} /> */}
+          {this._renderCommentAvatar(comment.user["profile_image"])}
         </TouchableOpacity>
         <View style={styles.postUsernameLocationContainer}>
           <TouchableOpacity style={styles.postUsernameView}>
@@ -215,9 +217,9 @@ export default class PostDetailsScreen extends React.Component {
       <View style={styles.commentsContainer}>
         <View style={styles.commentContainer}>
           <Icon
-            name='ios-chatbubbles'
-            color='black'
-            type="ionicon"
+            name='comments'
+            color='#666666'
+            type="font-awesome"
             size={25}
             containerStyle={{ marginHorizontal: 10 }}
           />
@@ -226,7 +228,7 @@ export default class PostDetailsScreen extends React.Component {
             onChangeText={comment => this.setState({ comment })}
             placeholder="Enter a comment"
             placeholderTextColor="gray"
-            inputStyle={{ color: 'black', fontFamily: 'Righteous', fontSize: 14 }}
+            inputStyle={{ color: 'black', fontSize: 14 }}
             onSubmitEditing={() => {
               this.postComment()
             }}
@@ -249,11 +251,41 @@ export default class PostDetailsScreen extends React.Component {
         <Image source={{ uri: image }} style={styles.avatar} />
       )
     }
+    else {
+      return (
+        <View
+          style={styles.defaultProfileAvatar}
+        >
+        </View>
+      )
+    }
+  }
+  _renderPostImage(image) {
+    if (image) {
+      return (
+        <Image style={styles.postImage} source={{ uri: image }} />
+      )
+    }
+  }
+  _renderCommentAvatar(image) {
+    if (image) {
+      return (
+        <Image style={styles.commentAvatar} source={{ uri: image }} />
+      )
+    }
+    else {
+      return (
+        <View
+          style={styles.defaultCommentAvatar}
+        >
+        </View>
+      )
+    }
   }
 
   postContent() {
     const { member, liked } = this.state
-    const Component = member.user ? KeyboardAwareScrollView : KeyboardAvoidingView
+    const Component = member && member.comments ? KeyboardAwareScrollView : KeyboardAvoidingView
     return (
       <Component
         style={styles.mainContainer}
@@ -264,36 +296,35 @@ export default class PostDetailsScreen extends React.Component {
             <View style={styles.postAuthorAvatarContainer}>
               <TouchableOpacity>
                 {member && member.user && this._renderProfileImage(member.user["profile_image"])}
-                {/* <Image source={{ uri: member.user.profile_image || '' }} style={styles.avatar} /> */}
               </TouchableOpacity>
             </View>
             <View style={styles.postAuthorInfoContainer}>
               <View style={styles.nameContainer}>
                 <TouchableOpacity>
-                  <Text style={styles.nameLabel}>{member.user.name}</Text>
+                  <Text style={styles.nameLabel}>{member && member.user && member.user.name}</Text>
                 </TouchableOpacity>
               </View>
-              {member.location &&
 
-                <View style={styles.locationContainer}>
-                  <TouchableOpacity>
-                    <Text style={styles.locationLabel}>{member.location}</Text>
-                  </TouchableOpacity>
-                </View>
-              }
+              <View style={styles.locationContainer}>
+                <TouchableOpacity>
+                  <Text style={styles.locationLabel}>{member && member.location}</Text>
+                </TouchableOpacity>
+              </View>
+
             </View>
           </View>
           <View style={styles.postContainer}>
             <View style={styles.postImageContainer}>
-              <Image style={styles.postImage} source={{ uri: member.image || '' }} />
+              {this._renderPostImage(member["image"])}
+
             </View>
             <View style={styles.postCaptionContainer}>
-              <Text style={styles.postCaption}> {member.description}</Text>
+              <Text style={styles.postCaption}> {member && member.description}</Text>
             </View>
           </View>
           <View style={styles.postInfoBottomContainer}>
             <View style={styles.postDataContainer}>
-              <Text style={styles.postDate}>{member.createdAt}</Text>
+              <Text style={styles.postDate}>{member && member.createdAt}</Text>
             </View>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
               <TouchableOpacity>
@@ -308,7 +339,7 @@ export default class PostDetailsScreen extends React.Component {
             </View>
           </View>
         </View>
-        <Text style={styles.sectionHeaderText}>{member.comments ? member.comments.length : 'NO'} COMMENTS</Text>
+        <Text style={styles.sectionLabel}>{member.comments ? member.comments.length : 'NO'} Comments</Text>
         {member.comments && this.renderComments()}
         {this.renderAddComment()}
       </Component>
@@ -318,7 +349,7 @@ export default class PostDetailsScreen extends React.Component {
     const { member, isLoading } = this.state
 
     return (
-      (isLoading || this.postContent())
+      (isLoading || member === null ? this.loadingView() : this.postContent())
     );
   }
 }
@@ -382,7 +413,7 @@ const styles = StyleSheet.create({
   postCaption: {
     margin: 10,
     color: '#44484B',
-    fontSize: 15,
+    fontSize: 20,
   },
   postInteractionContainer: {
 
@@ -457,10 +488,27 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 10,
     color: '#737373',
+    marginVertical: 7,
   },
   loadingView: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  defaultProfileAvatar: {
+    height: 45,
+    width: 45,
+    borderRadius: 22,
+    marginLeft: 5,
+    borderColor: '#aaaaaa',
+    borderWidth: 0.5,
+  },
+  defaultCommentAvatar: {
+    height: 30,
+    width: 30,
+    borderRadius: 15,
+    marginLeft: 10,
+    borderColor: '#aaaaaa',
+    borderWidth: 0.5,
   },
 });
