@@ -8,7 +8,7 @@ import { ENV_URL, getUserId } from '../utils/auth';
 
 export default class SocialFeedScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: 'Daug',
+    title: 'Daug Test ssss',
     headerTintColor: '#2F80ED',
     headerTitleStyle: {
       fontSize: 20,
