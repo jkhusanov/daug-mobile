@@ -32,15 +32,15 @@ export default class ProfileScreen extends React.Component {
   componentDidMount() {
     //When the component is loaded
     getUserId()
-    .then(res => {
-      this.setState({ userId: res })
-      this.getProfile()
-    })
-    .catch(err => {
-      alert("An error occurred")
-    });
+      .then(res => {
+        this.setState({ userId: res })
+        this.getProfile()
+      })
+      .catch(err => {
+        alert("An error occurred")
+      });
 
-  this.setState({ fontLoaded: true });
+    this.setState({ fontLoaded: true });
   }
   async getProfile() {
 
@@ -90,7 +90,7 @@ export default class ProfileScreen extends React.Component {
     }
     else {
       return (
-        <View 
+        <View
           style={styles.defaultCoverImage}
         >
         </View>
@@ -99,24 +99,32 @@ export default class ProfileScreen extends React.Component {
     }
   }
   _renderProfileImage(image) {
-    if(image) {
+    if (image) {
       return (
         <Image
-        style={styles.avatarImage}
-        source={{ uri: image }}
-      />      
-    )
+          style={styles.avatarImage}
+          source={{ uri: image }}
+        />
+      )
+    }
+    else {
+      return (
+        <View
+          style={styles.defaultProfileAvatar}
+        >
+        </View>
+      )
     }
   }
   _renderProfileName(name) {
-    if(name) {
+    if (name) {
       return (
         <Text style={styles.profileName}>{name}</Text>
       )
     }
   }
   _renderProfileBio(bio) {
-    if(bio) {
+    if (bio) {
       return (
         <Text style={styles.profileInfoText}>{bio}</Text>
       )
@@ -130,7 +138,7 @@ export default class ProfileScreen extends React.Component {
           <View style={styles.mainContainer}>
             <View style={styles.profileHeaderContainer}>
               <View style={styles.profileHeaderBannerContainer}>
-              {this._renderProfileBanner(profile["banner_image"])}
+                {this._renderProfileBanner(profile["banner_image"])}
               </View>
               <View style={styles.profileInfoContainer}>
                 <View style={styles.profileInfoTopContainer}>
@@ -158,7 +166,7 @@ export default class ProfileScreen extends React.Component {
                         buttonStyle={styles.profileEditButton}
                         containerStyle={{ marginBottom: 10, marginTop: 10 }}
                         textStyle={styles.profileEditText}
-                        onPress={() => this.props.navigation.navigate('EditProfile', {user})}
+                        onPress={() => this.props.navigation.navigate('EditProfile', { user })}
                       />
                     </View>
                   </View>
@@ -185,7 +193,7 @@ export default class ProfileScreen extends React.Component {
               <View style={styles.profileLogoutContainer}>
                 <Button
                   text='Logout'
-                  onPress={() =>  onSignOut().then(() => this.props.navigation.navigate('Intro'))}
+                  onPress={() => onSignOut().then(() => this.props.navigation.navigate('Intro'))}
                   textStyle={styles.profileLogoutButtonText}
                   buttonStyle={styles.profileLogoutButton}
                 >
@@ -303,6 +311,15 @@ const styles = StyleSheet.create({
     width: 170,
     height: 40,
     borderRadius: 0,
-  }
+  },
+  defaultProfileAvatar: {
+    height: 90,
+    width: 90,
+    borderRadius: 45,
+    borderWidth: 1,
+    borderColor: '#cccccc',
+    marginTop: -40,
+    backgroundColor: 'white'
+  },
 
 });
