@@ -2,10 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Button } from 'react-native-elements'
 import { onSignOut } from "../utils/auth";
+import { ENV_URL, getUserId } from '../utils/auth';
 
-
-import COVER from '../../assets/profile/cover.jpeg';
-import AVATAR from '../../assets/profile/avatar.jpeg';
 
 export default class ProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -33,12 +31,21 @@ export default class ProfileScreen extends React.Component {
   }
   componentDidMount() {
     //When the component is loaded
-    this.getProfile()
+    getUserId()
+    .then(res => {
+      this.setState({ userId: res })
+      this.getProfile()
+    })
+    .catch(err => {
+      alert("An error occurred")
+    });
+
+  this.setState({ fontLoaded: true });
   }
   async getProfile() {
 
     try {
-      let response = await fetch(`https://daug-app.herokuapp.com/api/users/6`, {
+      let response = await fetch(`${ENV_URL}/api/users/${this.state.userId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
