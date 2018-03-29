@@ -2,7 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableHighlight, TouchableOpacity, Image, ScrollView, StatusBar, Alert } from 'react-native';
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { Button, Icon } from 'react-native-elements';
+import { Provider } from 'react-redux'
 import { ENV_URL, getUserId } from '../utils/auth';
+
 
 export default class SocialFeedScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
