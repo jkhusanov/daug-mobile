@@ -104,8 +104,8 @@ export default class SocialFeedScreen extends React.Component {
     }
   }
   //Posting new like 
-  async postLike() {
-    const { postId, user, posts } = this.state
+  async postLike(postId) {
+    const { user, posts } = this.state
       
       try {
         let response = await fetch(`${ENV_URL}/api/posts/${postId}/like/${user.id}`, {
@@ -123,7 +123,7 @@ export default class SocialFeedScreen extends React.Component {
   
           console.log(responseJSON)
   
-          this.fetchPost()
+          this.getFeed()
           this.setState({ liked: true })
   
           Alert.alert(
@@ -306,7 +306,8 @@ export default class SocialFeedScreen extends React.Component {
             </TouchableOpacity>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
             {/* <TouchableOpacity onPress={() => liked === false ? this.postLike() : this.postUnLike()}> */}
-              <TouchableOpacity onPress={() => this.props.navigation.navigate('PostDetails', { postId: member.id })}>
+            <TouchableOpacity onPress={() => this.postLike(member.id)}>
+              {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('PostDetails', { postId: member.id })}> */}
                 <Icon
                   name= {liked ? 'heart' : 'heart-o'}
                   type='font-awesome'
