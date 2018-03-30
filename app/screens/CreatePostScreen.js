@@ -361,7 +361,6 @@ const styles = StyleSheet.create({
   takenPhotoShow: {
     width: '100%',
     height: 250,
-    marginBottom: 50,
   },
   postImage: {
     width: '100%',
