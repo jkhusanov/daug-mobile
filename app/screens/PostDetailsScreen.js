@@ -511,7 +511,7 @@ const styles = StyleSheet.create({
 
   postImage: {
     width: '100%',
-    height: 230,
+    height: 250,
   },
   postCaption: {
     margin: 10,

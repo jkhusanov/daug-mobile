@@ -4,6 +4,7 @@ import { Button, Icon, Header } from 'react-native-elements';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { ImagePicker } from 'expo';
 import { RNS3 } from 'react-native-aws3';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { ENV_URL, getUserId } from '../utils/auth';
 
@@ -151,7 +152,7 @@ export default class CreatePostScreen extends React.Component {
     });
   };
   returnImage(image) {
-    this.setState({image: image})
+    this.setState({ image: image })
     console.log(image)
 
     const file = {
@@ -180,9 +181,9 @@ export default class CreatePostScreen extends React.Component {
     });
   }
   _renderProfileImage(image) {
-    if(image) {
+    if (image) {
       return (
-        <Image source={{ uri: image}} style={styles.avatar} />
+        <Image source={{ uri: image }} style={styles.avatar} />
       )
     }
   }
@@ -212,34 +213,35 @@ export default class CreatePostScreen extends React.Component {
             outerContainerStyles={{ backgroundColor: '#FAFAFA' }}
           />
         </SafeAreaView>
-        <View style={styles.mainContainer}>
-          <View style={styles.postInfoContainer}>
-            <View style={styles.postAuthorAvatarContainer}>
-              <TouchableOpacity>
-                {this._renderProfileImage(member["profile_image"])}
-              </TouchableOpacity>
-            </View>
-            <View style={styles.postAuthorInfoContainer}>
-              <View style={styles.nameContainer}>
+        <KeyboardAwareScrollView>
+          <View style={styles.mainContainer}>
+            <View style={styles.postInfoContainer}>
+              <View style={styles.postAuthorAvatarContainer}>
                 <TouchableOpacity>
-                  <Text style={styles.nameLabel}>{member && member.name}</Text>
+                  {this._renderProfileImage(member["profile_image"])}
                 </TouchableOpacity>
               </View>
-              <View style={styles.locationContainer}>
-                <TouchableOpacity>
-                  <Text style={styles.locationLabel}>
-                    <Entypo
-                      name='location'
-                      style={styles.locationIcon}
-                      size={20}
-                    />
-                    {location}
-                  </Text>
-                </TouchableOpacity>
+              <View style={styles.postAuthorInfoContainer}>
+                <View style={styles.nameContainer}>
+                  <TouchableOpacity>
+                    <Text style={styles.nameLabel}>{member && member.name}</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.locationContainer}>
+                  <TouchableOpacity>
+                    <Text style={styles.locationLabel}>
+                      <Entypo
+                        name='location'
+                        style={styles.locationIcon}
+                        size={20}
+                      />
+                      {location}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-          <View style={styles.imageShareContainer}>
+            <View style={styles.imageShareContainer}>
               <View style={styles.uploadImageContainer}>
                 <TouchableOpacity onPress={() => this._pickImage()}>
                   <Ionicons
@@ -252,7 +254,7 @@ export default class CreatePostScreen extends React.Component {
                 </TouchableOpacity>
               </View>
               <View style={styles.uploadImageContainer}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('TakePhoto', {returnImage: this.returnImage.bind(this)})}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('TakePhoto', { returnImage: this.returnImage.bind(this) })}>
                   <Ionicons
                     name='ios-camera'
                     size={45}
@@ -263,21 +265,25 @@ export default class CreatePostScreen extends React.Component {
                 </TouchableOpacity>
               </View>
             </View>
-          <KeyboardAvoidingView behavior="height">
-
-            <View style={styles.textInputContainer}>
-              <TextInput
-                editable={true}
-                placeholder={"Share your thoughts!"}
-                placeholderTextColor={'gray'}
-                multiline={true}
-                value={newPostContent}
-                onChangeText={(text) => this.setState({ newPostContent: text })}
-                style={styles.postTextInput}
-              />
-            </View>
-          </KeyboardAvoidingView >
-        </View>
+              {this.state.image ?
+                <View style={styles.takenPhotoShow}>
+                  <Image source={{ uri: image }} style={styles.postImage} resizeMode="cover" />
+                </View> :
+                <View></View>
+              }
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  editable={true}
+                  placeholder={"Share your thoughts!"}
+                  placeholderTextColor={'gray'}
+                  multiline={true}
+                  value={newPostContent}
+                  onChangeText={(text) => this.setState({ newPostContent: text })}
+                  style={styles.postTextInput}
+                />
+              </View>
+          </View>
+          </KeyboardAwareScrollView>
       </View>
     );
   }
@@ -351,6 +357,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
 
+  },
+  takenPhotoShow: {
+    width: '100%',
+    height: 250,
+    marginBottom: 50,
+  },
+  postImage: {
+    width: '100%',
+    height: 250,
   }
 
 });
