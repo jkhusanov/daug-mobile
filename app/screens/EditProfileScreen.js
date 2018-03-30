@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, SafeAreaView, KeyboardAvoidingView, Alert } from 'react-native';
 import { Button, Input, Header } from 'react-native-elements'
+import { onSignOut } from "../utils/auth";
 
 
 import AVATAR from '../../assets/profile/avatar.jpeg';
@@ -170,6 +171,15 @@ export default class EditProfileScreen extends React.Component {
                 <View style={styles.editPrivateInfoContainer}>
                   <Text style={styles.privateInfoLabel}>Private Information</Text>
                 </View>
+                <View style={styles.profileLogoutContainer}>
+                <Button
+                  text='Logout'
+                  onPress={() => onSignOut().then(() => this.props.navigation.navigate('Intro'))}
+                  textStyle={styles.profileLogoutButtonText}
+                  buttonStyle={styles.profileLogoutButton}
+                >
+                </Button>
+              </View>
               </View>
             </KeyboardAvoidingView>
           }
@@ -256,5 +266,19 @@ const styles = StyleSheet.create({
     color: '#737373',
     marginHorizontal: 20,
     fontSize: 15,
-  }
+  },
+  profileLogoutContainer: {
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileLogoutButtonText: {
+    fontSize: 25,
+  },
+  profileLogoutButton: {
+    backgroundColor: '#A5ECD7',
+    width: 170,
+    height: 40,
+    borderRadius: 0,
+  },
 });

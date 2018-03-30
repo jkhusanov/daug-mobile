@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, DeviceEventEmitter, Alert, FlatList, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements'
-import { onSignOut } from "../utils/auth";
 import { ENV_URL, getUserId } from '../utils/auth';
 
+const DEVICE_WIDTH = Dimensions.get('window').width;
 
 export default class ProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -21,29 +21,53 @@ export default class ProfileScreen extends React.Component {
   }
   constructor(props) {
     super(props);
+    const userId = props.navigation.state.params && props.navigation.state.params.userId
+    const isHeaderShow = props.navigation.state.params && props.navigation.state.params.isHeaderShow
+
     this.state = {
       isLiked: false,
       isProfileLoading: true,
       profile: null,
-      user: 6,
-
+      isHeaderShow: isHeaderShow || false,
+      userId: userId || null,
     };
   }
   componentDidMount() {
     //When the component is loaded
-    getUserId()
-      .then(res => {
-        this.setState({ userId: res })
-        this.getProfile()
-      })
-      .catch(err => {
-        alert("An error occurred")
-      });
+    const { userId } = this.state
 
-    this.setState({ fontLoaded: true });
+    //userId null means that we are viewing our own profile and we need to get our profile's information
+    if (userId === null) {
+      getUserId()
+        .then(res => {
+          this.setState({ userId: res })
+          this.state.profile === null && this.getProfile()
+        })
+        .catch(err => {
+          alert("An error occurred")
+        });
+    }
+    //this is needed to follow a user when their profile is viewed
+    else {
+      this.getProfile()
+
+      getUserId()
+        .then(res => {
+          this.setState({ profile_detail_user_id: res })
+        })
+        .catch(err => {
+          alert("An error occurred")
+        });
+    }
+  }
+  //Used to refresh screen if user information is changed in EditProfile
+  componentWillMount() {
+    DeviceEventEmitter.addListener('user_profile_updated', (e) => {
+      this.getProfile()
+    })
   }
   async getProfile() {
-
+    this.setState({ isLoading: true });
     try {
       let response = await fetch(`${ENV_URL}/api/users/${this.state.userId}`, {
         method: 'GET',
@@ -79,6 +103,58 @@ export default class ProfileScreen extends React.Component {
       Alert.alert('Unable to get the profile info. Please try again later')
     }
   }
+
+  //Follow a user
+  async followUser() {
+    const { profile_detail_user_id, userId } = this.state
+
+    try {
+      let response = await fetch(`${ENV_URL}/api/users/${profile_detail_user_id}/follow/${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: null
+      });
+
+      let responseJSON = null
+
+      if (response.status === 201) {
+        responseJSON = response.json();
+
+        console.log(responseJSON)
+        this.getProfile()
+        this.setState({ following: true })
+
+        Alert.alert(
+          'Following user!',
+          '',
+          [
+            {
+              text: "Dismiss", onPress: () => {
+                console.log("User followed!")
+              }
+            }
+          ],
+          { cancelable: false }
+        )
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false, errors: responseJSON.errors, following: false })
+
+        Alert.alert('Unable to follow user ', `${error}`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, error, following: false })
+
+      Alert.alert('Unable to follow user ', `${error}`)
+    }
+  }
+
   _renderProfileBanner(image) {
     if (image) {
       return (
@@ -130,8 +206,46 @@ export default class ProfileScreen extends React.Component {
       )
     }
   }
+  _renderPostImage(image) {
+    if (image) {
+      return (
+        <Image
+          style={styles.postImage}
+          source={{ uri: image }}
+        />
+      )
+    }
+  }
+  displayPost(post, index) {
+    const { navigate } = this.props.navigation
+
+    return (
+      <TouchableOpacity
+        style={[styles.postIconContainer, { width: DEVICE_WIDTH / 3, height: DEVICE_WIDTH / 3 }]}
+        key={index}
+        onPress={() => navigate('PostDetails', { postId: post.id })}
+        activeOpacity={1}
+      >
+        {post.image && <Image source={{ uri: post.image || '' }} style={styles.postImage} resizeMode="cover" />}
+      </TouchableOpacity>
+    )
+  }
+
+  renderPosts() {
+    const { posts } = this.state.profile
+
+    return (
+      <View style={styles.postsContainer}>
+        {
+          posts.map((post, index) => {
+            return this.displayPost(post, index)
+          })
+        }
+      </View>
+    )
+  }
   render() {
-    const { isProfileLoading, profile, user } = this.state;
+    const { isProfileLoading, profile, isHeaderShow } = this.state;
     return (
       <ScrollView style={{ backgroundColor: '#fff' }}>
         {!isProfileLoading &&
@@ -152,22 +266,30 @@ export default class ProfileScreen extends React.Component {
                         <Text style={styles.profileStatsText}>posts</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.profileStatsView}>
-                        <Text style={styles.profileStatsNumbers}>1550</Text>
+                        <Text style={styles.profileStatsNumbers}>{profile.followers.length}</Text>
                         <Text style={styles.profileStatsText}>followers</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.profileStatsView}>
-                        <Text style={styles.profileStatsNumbers}>250</Text>
+                        <Text style={styles.profileStatsNumbers}>{profile.following.length}</Text>
                         <Text style={styles.profileStatsText}>following</Text>
                       </TouchableOpacity>
                     </View>
                     <View style={styles.profileEditContainer}>
-                      <Button
-                        text='Edit Profile'
-                        buttonStyle={styles.profileEditButton}
-                        containerStyle={{ marginBottom: 10, marginTop: 10 }}
-                        textStyle={styles.profileEditText}
-                        onPress={() => this.props.navigation.navigate('EditProfile', { user })}
-                      />
+                      {!isHeaderShow ?
+                        <Button
+                          text='Edit Profile'
+                          buttonStyle={styles.profileEditButton}
+                          containerStyle={{ marginBottom: 10, marginTop: 10 }}
+                          textStyle={styles.profileEditText}
+                          onPress={() => this.props.navigation.navigate('EditProfile', { profile: profile })}
+                        /> :
+                        <Button text={this.state.following ? 'Following' : 'Follow'}
+                          containerStyle={{ marginBottom: 10, marginTop: 10 }}
+                          buttonStyle={this.state.following ? styles.followingButton : styles.followButton}
+                          textStyle={this.state.following ? styles.followingText : styles.followText}
+                          onPress={() => this.followUser()}
+                        />
+                      }
                     </View>
                   </View>
                 </View>
@@ -178,27 +300,7 @@ export default class ProfileScreen extends React.Component {
               </View>
             </View>
             <View style={styles.profilePostsContainer}>
-
-              <View style={styles.profileLogoutContainer}>
-                {/* <Button
-                text = 'Post Details '
-                onPress={() => this.props.navigation.navigate('PostDetails')}
-                textStyle={styles.profileLogoutButtonText}
-                buttonStyle={styles.profileLogoutButton}
-              >  
-              </Button> */}
-                <Text style={styles.profileStatsNumbers}>{profile.posts.length} Posts</Text>
-
-              </View>
-              <View style={styles.profileLogoutContainer}>
-                <Button
-                  text='Logout'
-                  onPress={() => onSignOut().then(() => this.props.navigation.navigate('Intro'))}
-                  textStyle={styles.profileLogoutButtonText}
-                  buttonStyle={styles.profileLogoutButton}
-                >
-                </Button>
-              </View>
+              {this.renderPosts()}
             </View>
           </View>
         }
@@ -246,6 +348,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#cccccc',
     marginTop: -40,
+    backgroundColor: 'white'
   },
   profileStatsEditContainer: {
     flex: 2,
@@ -303,15 +406,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  profileLogoutButtonText: {
-    fontSize: 25,
-  },
-  profileLogoutButton: {
-    backgroundColor: '#A5ECD7',
-    width: 170,
-    height: 40,
-    borderRadius: 0,
-  },
   defaultProfileAvatar: {
     height: 90,
     width: 90,
@@ -321,5 +415,40 @@ const styles = StyleSheet.create({
     marginTop: -40,
     backgroundColor: 'white'
   },
+  followingButton: {
+    width: 150,
+    height: 30,
+    borderColor: '#aaaaaa',
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: '#99ffcc'
+  },
+  followButton: {
+    width: 150,
+    height: 30,
+    borderColor: '#aaaaaa',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  followingText: {
+    color: 'black',
+  },
+  followText: {
+
+  },
+  postsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  postIconContainer: {
+    borderWidth: 0.5,
+    borderColor: 'white',
+    backgroundColor: '#f9f9f9'
+  },
+  postImage: {
+    flex: 1
+  }
+
 
 });

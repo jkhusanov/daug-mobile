@@ -31,17 +31,17 @@ export default class SocialFeedScreen extends React.Component {
     this.getFeed()
     //getting user ID from AsyncStorage 
     getUserId()
-    .then(res => {
-      this.setState({ userId: res })
-      this.fetchUser()
-    })
-    .catch(err => {
-      alert("An error occurred")
-    });
+      .then(res => {
+        this.setState({ userId: res })
+        this.fetchUser()
+      })
+      .catch(err => {
+        alert("An error occurred")
+      });
   }
   //Getting feed
   async getFeed() {
-    const {postId} = this.state
+    const { postId } = this.state
     try {
       let response = await fetch(`${ENV_URL}/api/feed`, {
         method: 'GET',
@@ -108,56 +108,56 @@ export default class SocialFeedScreen extends React.Component {
   //Posting new like 
   async postLike(postId) {
     const { user } = this.state
-      
-      try {
-        let response = await fetch(`${ENV_URL}/api/posts/${postId}/like/${user.id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-          },
-          body: null
-        });
-  
-        let responseJSON = null
-  
-        if (response.status === 201) {
-          responseJSON = await response.json();
-  
-          console.log(responseJSON)
-  
-          this.getFeed()
-          this.setState({ liked: true })
-  
-          Alert.alert(
-            'You liked this post!',
-            '',
-            [
-              {
-                text: "Dismiss", onPress: () => {
-                  console.log("liked!")
-                }
+
+    try {
+      let response = await fetch(`${ENV_URL}/api/posts/${postId}/like/${user.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: null
+      });
+
+      let responseJSON = null
+
+      if (response.status === 201) {
+        responseJSON = await response.json();
+
+        console.log(responseJSON)
+
+        this.getFeed()
+        this.setState({ liked: true })
+
+        Alert.alert(
+          'You liked this post!',
+          '',
+          [
+            {
+              text: "Dismiss", onPress: () => {
+                console.log("liked!")
               }
-            ],
-            { cancelable: false }
-          )
-        } else {
-          responseJSON = await response.json();
-          const error = responseJSON.message
-  
-          console.log(responseJSON)
-  
-          this.setState({ isLoading: false, errors: responseJSON.errors, comment: null })
-  
-          Alert.alert('1 Unable to like post! ', `${error}`)
-        }
-      } catch (error) {
-        this.setState({ isLoading: false, error, comment: null })
-  
-        Alert.alert('1.2 Unable to like post! ', `${error}`)
-      }    
+            }
+          ],
+          { cancelable: false }
+        )
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false, errors: responseJSON.errors, comment: null })
+
+        Alert.alert('1 Unable to like post! ', `${error}`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, error, comment: null })
+
+      Alert.alert('1.2 Unable to like post! ', `${error}`)
+    }
   }
   // Posting new unlike
-  async postUnLike(postId){
+  async postUnLike(postId) {
     const { user } = this.state
 
     try {
@@ -209,9 +209,9 @@ export default class SocialFeedScreen extends React.Component {
     }
   }
   _renderProfileImage(image) {
-    if(image) {
+    if (image) {
       return (
-        <Image source={{ uri: image}} style={styles.avatar} />
+        <Image source={{ uri: image }} style={styles.avatar} />
       )
     }
     else {
@@ -224,21 +224,21 @@ export default class SocialFeedScreen extends React.Component {
     }
   }
   _renderPostImage(image) {
-    if(image) {
+    if (image) {
       return (
         <Image style={styles.postImage} source={{ uri: image }} resizeMode="cover" />
       )
     }
   }
   _renderPostDescription(description) {
-    if(description) {
+    if (description) {
       return (
         <Text style={styles.postCaption}> {description}</Text>
       )
     }
   }
 
-  _renderMembers(member){
+  _renderMembers(member) {
     const { isFeedLoading, user, liked, } = this.state;
 
     return (
@@ -250,15 +250,16 @@ export default class SocialFeedScreen extends React.Component {
         <View style={styles.membersRowContainer} key={member}>
           <View style={styles.postInfoTopContainer}>
             <View style={styles.postAuthorAvatarContainer}>
-              <TouchableOpacity>
-                {/* <Image source={{ uri: member.user.profile_image }} style={styles.avatar} /> */}
+              <TouchableOpacity 
+                onPress={() => this.props.navigation.navigate('Profile', ( member.user.id == this.state.userId) ? { isHeaderShow: false, userId: member.user.id } : { isHeaderShow: true, userId: member.user.id } )}
+              >
                 {this._renderProfileImage(member.user["profile_image"])}
               </TouchableOpacity>
             </View>
             <View style={styles.postAuthorInfoContainer}>
               <View style={styles.nameContainer}>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Profile', { isHeaderShow: true, userId: member.user.id })}
+                  onPress={() => this.props.navigation.navigate('Profile', ( member.user.id == this.state.userId) ? { isHeaderShow: false, userId: member.user.id } : { isHeaderShow: true, userId: member.user.id } )}
                 >
                   <Text style={styles.nameLabel}>{member.user.name}</Text>
                 </TouchableOpacity>
@@ -274,15 +275,15 @@ export default class SocialFeedScreen extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate('PostDetails', { postId: member.id })
-              } 
-              activeOpacity = {0.9}
+              }
+              activeOpacity={0.9}
             >
               <View style={styles.postImageContainer}>
                 {this._renderPostImage(member["image"])}
               </View>
               <View style={styles.postCaptionContainer}>
-              {this._renderPostDescription(member["description"])}
-            </View>
+                {this._renderPostDescription(member["description"])}
+              </View>
             </TouchableOpacity>
 
           </View>
@@ -293,24 +294,24 @@ export default class SocialFeedScreen extends React.Component {
             <TouchableOpacity
               onPress={() =>
                 this.props.navigation.navigate('PostDetails', { postId: member.id })
-              } 
-              activeOpacity = {0.9}
+              }
+              activeOpacity={0.9}
             >
-            <View style={styles.postCommentContainer}>
-              <Icon
-                name='comments-o'
-                type='font-awesome'
-                size={25}
-                color='#666666'
-              />
-              <Text style={styles.postActionText}>{member.comments.length}</Text>
-            </View>
+              <View style={styles.postCommentContainer}>
+                <Icon
+                  name='comments-o'
+                  type='font-awesome'
+                  size={25}
+                  color='#666666'
+                />
+                <Text style={styles.postActionText}>{member.comments.length}</Text>
+              </View>
             </TouchableOpacity>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
-            <TouchableOpacity onPress={() => liked === false ? this.postLike(member.id): this.postUnLike(member.id)}>
-              {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('PostDetails', { postId: member.id })}> */}
+              <TouchableOpacity onPress={() => liked === false ? this.postLike(member.id) : this.postUnLike(member.id)}>
+                {/* <TouchableOpacity onPress={() => this.props.navigation.navigate('PostDetails', { postId: member.id })}> */}
                 <Icon
-                  name= {liked ? 'heart' : 'heart-o'}
+                  name={liked ? 'heart' : 'heart-o'}
                   type='font-awesome'
                   color={liked ? 'red' : 'black'}
                   size={25}
@@ -326,17 +327,17 @@ export default class SocialFeedScreen extends React.Component {
   renderList() {
     const { isFeedLoading, posts, user } = this.state;
     return (
-    <View style={styles.flatListContainer}>
-    {!isFeedLoading &&
+      <View style={styles.flatListContainer}>
+        {!isFeedLoading &&
 
-      <FlatList
-        data={posts}
-        extraData={this.state}
-        keyExtractor={(item, index) => index}
-        renderItem={({ item }) => this._renderMembers(item)}
-      /> 
-    }
-  </View>
+          <FlatList
+            data={posts}
+            extraData={this.state}
+            keyExtractor={(item, index) => index}
+            renderItem={({ item }) => this._renderMembers(item)}
+          />
+        }
+      </View>
     )
   }
   render() {
@@ -349,7 +350,7 @@ export default class SocialFeedScreen extends React.Component {
             <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost', { member: user })}>
               <Text style={styles.createPostLabel}>Create Post</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost',  { member: user })}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost', { member: user })}>
               <Icon
                 name='picture'
                 type='simple-line-icon'
@@ -382,7 +383,9 @@ const styles = StyleSheet.create({
     height: 45,
     width: 45,
     borderRadius: 22,
-    marginLeft: 5
+    marginLeft: 5,
+    borderColor: '#aaaaaa',
+    borderWidth: 0.5,
   },
   nameContainer: {
     flex: 1,
@@ -488,7 +491,9 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     marginLeft: 5,
     borderColor: '#aaaaaa',
-    borderWidth: 0.5,
+    borderWidth: 1,
+    backgroundColor: 'white'
+    
   },
 
 

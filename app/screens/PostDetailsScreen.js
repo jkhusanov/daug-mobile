@@ -113,11 +113,15 @@ export default class PostDetailsScreen extends React.Component {
   displayComment(comment, index) {
     return (
       <View style={styles.commentContainer} key={index}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('Profile', (comment.user.id == this.state.userId) ? { isHeaderShow: false, userId: comment.user.id } : { isHeaderShow: true, userId: comment.user.id })}
+        >
           {this._renderCommentAvatar(comment.user["profile_image"])}
         </TouchableOpacity>
         <View style={styles.postUsernameLocationContainer}>
-          <TouchableOpacity style={styles.postUsernameView}>
+          <TouchableOpacity style={styles.postUsernameView}
+            onPress={() => this.props.navigation.navigate('Profile', (comment.user.id == this.state.userId) ? { isHeaderShow: false, userId: comment.user.id } : { isHeaderShow: true, userId: comment.user.id })}
+          >
             <Text style={styles.commentUsernameLabel}>{comment.user.name}</Text>
           </TouchableOpacity>
           <View style={styles.commentLocationContainer}>
@@ -239,56 +243,56 @@ export default class PostDetailsScreen extends React.Component {
   //Posting new like 
   async postLike() {
     const { postId, user } = this.state
-    
-      try {
-        let response = await fetch(`${ENV_URL}/api/posts/${postId}/like/${user.id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-          },
-          body: null
-        });
-  
-        let responseJSON = null
-  
-        if (response.status === 201) {
-          responseJSON = await response.json();
-  
-          console.log(responseJSON)
-  
-          this.fetchPost()
-          this.setState({ liked: true })
-  
-          Alert.alert(
-            'You liked this post!',
-            '',
-            [
-              {
-                text: "Dismiss", onPress: () => {
-                  console.log("liked!")
-                }
+
+    try {
+      let response = await fetch(`${ENV_URL}/api/posts/${postId}/like/${user.id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: null
+      });
+
+      let responseJSON = null
+
+      if (response.status === 201) {
+        responseJSON = await response.json();
+
+        console.log(responseJSON)
+
+        this.fetchPost()
+        this.setState({ liked: true })
+
+        Alert.alert(
+          'You liked this post!',
+          '',
+          [
+            {
+              text: "Dismiss", onPress: () => {
+                console.log("liked!")
               }
-            ],
-            { cancelable: false }
-          )
-        } else {
-          responseJSON = await response.json();
-          const error = responseJSON.message
-  
-          console.log(responseJSON)
-  
-          this.setState({ isLoading: false, errors: responseJSON.errors, comment: null })
-  
-          Alert.alert('1 Unable to like post! ', `${error}`)
-        }
-      } catch (error) {
-        this.setState({ isLoading: false, error, comment: null })
-  
-        Alert.alert('1.2 Unable to like post! ', `${error}`)
-      }    
+            }
+          ],
+          { cancelable: false }
+        )
+      } else {
+        responseJSON = await response.json();
+        const error = responseJSON.message
+
+        console.log(responseJSON)
+
+        this.setState({ isLoading: false, errors: responseJSON.errors, comment: null })
+
+        Alert.alert('1 Unable to like post! ', `${error}`)
+      }
+    } catch (error) {
+      this.setState({ isLoading: false, error, comment: null })
+
+      Alert.alert('1.2 Unable to like post! ', `${error}`)
+    }
   }
   // Posting new unlike
-  async postUnLike(){
+  async postUnLike() {
     const { postId, user } = this.state
 
     try {
@@ -396,13 +400,18 @@ export default class PostDetailsScreen extends React.Component {
         <View style={styles.membersRowContainer} key={member}>
           <View style={styles.postInfoTopContainer}>
             <View style={styles.postAuthorAvatarContainer}>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Profile', (member.user.id == this.state.userId) ? { isHeaderShow: false, userId: member.user.id } : { isHeaderShow: true, userId: member.user.id })}
+
+              >
                 {member && member.user && this._renderProfileImage(member.user["profile_image"])}
               </TouchableOpacity>
             </View>
             <View style={styles.postAuthorInfoContainer}>
               <View style={styles.nameContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Profile', (member.user.id == this.state.userId) ? { isHeaderShow: false, userId: member.user.id } : { isHeaderShow: true, userId: member.user.id })}
+                >
                   <Text style={styles.nameLabel}>{member && member.user && member.user.name}</Text>
                 </TouchableOpacity>
               </View>
@@ -430,9 +439,9 @@ export default class PostDetailsScreen extends React.Component {
             </View>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
               <TouchableOpacity onPress={() => liked === false ? this.postLike() : this.postUnLike()}>
-              {/* <TouchableOpacity onPress={() =>  this.postLike()}> */}
+                {/* <TouchableOpacity onPress={() =>  this.postLike()}> */}
                 <Icon
-                  name= {liked ? 'heart' : 'heart-o'}
+                  name={liked ? 'heart' : 'heart-o'}
                   type='font-awesome'
                   color={liked ? 'red' : 'black'}
                   size={25}
