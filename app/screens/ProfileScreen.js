@@ -71,9 +71,6 @@ export default class ProfileScreen extends React.Component {
     try {
       let response = await fetch(`${ENV_URL}/api/users/${this.state.userId}`, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
       });
 
       let responseJSON = null
@@ -83,8 +80,8 @@ export default class ProfileScreen extends React.Component {
         responseJSON = await response.json();
         console.log(responseJSON)
         this.setState({
-          isProfileLoading: false,
           profile: responseJSON,
+          isProfileLoading: false,
         })
       } else {
         responseJSON = await response.json();
@@ -92,11 +89,9 @@ export default class ProfileScreen extends React.Component {
 
         console.log(responseJSON)
 
-        this.setState({ errors: responseJSON.errors })
         Alert.alert('Unable to get your profile info', `Reason.. ${error}!`)
       }
     } catch (error) {
-      this.setState({ isProfileLoading: false, response: error })
 
       console.log(error)
 
