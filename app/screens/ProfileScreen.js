@@ -239,7 +239,7 @@ export default class ProfileScreen extends React.Component {
     return (
       <View style={styles.postsContainer}>
         {
-          posts.map((post, index) => {
+          posts.slice(0).reverse().map((post, index) => {
             return this.displayPost(post, index)
           })
         }
