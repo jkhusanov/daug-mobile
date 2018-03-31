@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, ActivityIndicator, Alert } from 'react-native';
 import { Button, Icon, Input } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
-import { ENV_URL, getUserId } from '../utils/auth';
+import { ENV_URL, getUserId, timeSince, timeSinceComment } from '../utils/auth';
 
 import { POST_DETAILS_MOCK_DATA } from '../utils/constantComments';
 
@@ -127,6 +127,9 @@ export default class PostDetailsScreen extends React.Component {
           </TouchableOpacity>
           <View style={styles.commentLocationContainer}>
             <Text style={styles.commentContentLabel}>{comment.description}</Text>
+          </View>
+          <View style={styles.commentLocationContainer}>              
+            <Text style={styles.postDateComment}>{timeSinceComment(comment.createdAt)}</Text>
           </View>
         </View>
       </View>
@@ -447,7 +450,7 @@ export default class PostDetailsScreen extends React.Component {
           </View>
           <View style={styles.postInfoBottomContainer}>
             <View style={styles.postDataContainer}>
-              <Text style={styles.postDate}>{member && member.createdAt}</Text>
+              <Text style={styles.postDate}>{member && timeSince(member.createdAt)}</Text>
             </View>
             <View style={[styles.postLikeContainer, { marginRight: 20 }]}>
               <TouchableOpacity onPress={() => liked === false ? this.postLike() : this.postUnLike()}>
@@ -555,6 +558,10 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     color: '#44484B',
     fontSize: 11,
+  },
+  postDateComment:{
+    color: '#44484B',
+    fontSize: 10,
   },
   postLikeContainer: {
     flex: 1,

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList, TouchableHighlight, TouchableOpacity,
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { Button, Icon } from 'react-native-elements';
 import { Provider } from 'react-redux'
-import { ENV_URL, getUserId } from '../utils/auth';
+import { ENV_URL, getUserId, timeSince } from '../utils/auth';
 
 
 export default class SocialFeedScreen extends React.Component {
@@ -304,7 +304,7 @@ export default class SocialFeedScreen extends React.Component {
           </View>
           <View style={styles.postInfoBottomContainer}>
             <View style={styles.postDataContainer}>
-              <Text style={styles.postDate}>{member.createdAt}</Text>
+              <Text style={styles.postDate}>{timeSince(member.createdAt)}</Text>
             </View>
             <TouchableOpacity
               onPress={() =>

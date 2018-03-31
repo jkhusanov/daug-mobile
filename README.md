@@ -194,7 +194,7 @@ router.post('api/posts/:postId/uncomment/:userId'); // DELETE
 - [x] Social Feed Screen - Make **`GET`** request to **`/api/feed/`** to get all posts for social feed
 	- [x] :star: **Bonus:** Use `ActivityIndicator` to show placeholder loading when fetching feed data
 	- [x] :star: **Bonus:** Use `DeviceEventEmitter` to trigger fetching posts when the `new_post_created` event is emitted
-	- [ ] :star: **Bonus:** Use `timeSince()` utility function to show relative times for post creation
+	- [x] :star: **Bonus:** Use `timeSince()` utility function to show relative times for post creation
 - [x] Create Post Screen - Make **`POST`** request to **`/api/users/:userId/posts`** to create a new post by the user
 	- [x] :star: **Bonus:** Use `DeviceEventEmitter` to emit `new_post_created` event once post is created
 - [x] Profile Screen - Make **`GET`** request to **`/api/users/:userId`** to get all the profile data
