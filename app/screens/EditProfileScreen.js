@@ -218,6 +218,24 @@ export default class EditProfileScreen extends React.Component {
       {this._renderButton('Cancel', () => this.setState({ visibleModal: null }))}
     </View>
   );
+  _renderProfileImage(image) {
+    if (image) {
+      return (
+        <Image
+          style={styles.avatarImage}
+          source={{ uri: image }}
+        />
+      )
+    }
+    else {
+      return (
+        <View
+          style={styles.defaultProfileAvatar}
+        >
+        </View>
+      )
+    }
+  }
   render() {
     const { name, email, password, bio, isLoading, profile, profile_image } = this.state
     return (
@@ -251,10 +269,7 @@ export default class EditProfileScreen extends React.Component {
                 <View style={styles.editInfoBasicContainer}>
                   <View style={styles.photoChangeContainer}>
                     <View style={styles.avatarContainer}>
-                      <Image
-                        style={styles.avatarImage}
-                        source={{ uri: profile_image || '' }}
-                      />
+                      {this._renderProfileImage(profile_image)}
                     </View>
                     <View style={styles.avatarChangeButtonContainer}>
                       {this._renderButton('Choose Photo', () => this.setState({ visibleModal: 1 }))}
@@ -348,6 +363,15 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 1,
     borderColor: '#cccccc',
+
+  },
+  defaultProfileAvatar: {
+    height: 100,
+    width: 100,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: '#cccccc',
+    backgroundColor: 'white'
   },
   avatarChangeButtonContainer: {
     alignItems: 'center',

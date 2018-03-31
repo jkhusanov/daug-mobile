@@ -128,8 +128,8 @@ Social Feed screen is based on **Facebook** and **Instagram**.
 - [x] Design & build a Post Details Screen
 - [x] Design & build a Create Post Screen
 - [x] Setup a **SocialStack** (using StackNavigator) for the Social Feed Screen (root), Post Details Screen (push) & Create Post Screen (modal) with mode: "modal" and custom RNE header component
-- [ ] :star: **Bonus:** Display Posts on ProfileScreen
-- [ ] :star: **Bonus:** Setup a **HomeNavigator**(using DrawerNavigator) with the **HomeTabs** (as root) and update **RootNavigator** to use **HomeNavigator** instead of **HomeTabs**
+- [x] :star: **Bonus:** Display Posts on ProfileScreen
+- [x] :star: **Bonus:** Setup a **HomeNavigator**(using DrawerNavigator) with the **HomeTabs** (as root) and update **RootNavigator** to use **HomeNavigator** instead of **HomeTabs**
 - [x] Add working gif of app to `README.MD`
 
 
@@ -244,11 +244,11 @@ router.post('api/posts/:postId/uncomment/:userId'); // DELETE
 - [x] Dynamically load user info 
 - [x] Fix photo upload and add take photo functionality
 - [x] Add Like, Comment and Follow API functionality
-- [ ] Clean up and format `README.MD` to showcase app - [follow this template](https://github.com/mobilespace/MobileGuides/blob/master/showcase_app_readme.md#readme-template-for-showcasing-a-mobile-app)
+- [x] Clean up and format `README.MD` to showcase app - [follow this template](https://github.com/mobilespace/MobileGuides/blob/master/showcase_app_readme.md#readme-template-for-showcasing-a-mobile-app)
 - [ ] :star: **Bonus:** Add phone number UI to Edit Profile screen
 - [x] :star: **Bonus:** Add Camera functionality to Create Post screen
 - [ ] :star: **Bonus:** Use Redux to share state between tab bar & screens
-- [ ] Add working gif of app to `README.MD`
+- [x] Add working gif of app to `README.MD`
 
 ### Demo
 
