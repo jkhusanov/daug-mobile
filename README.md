@@ -20,7 +20,7 @@
 
 - Your pets can **sign up or login** using their paws.
 - They can **upload selfies** or **post their thoughts** for other pets to see.
-- They can also look at **other pets posts** and either **paw** (like) or **scratch** (dislike) it.
+- They can also look at **other pets posts** and either **paw** (like) or just dislike it.
 
 ## Functionality
 - Daug is a fully functioning Social Network app
@@ -44,13 +44,17 @@ exp start
 exp ios
 ```
 
+## Milestones
+
+Below you can see my main milestones and how I achieved them
+
 ## Designs
 
 Intro, Login & Sign Up screens are based on **Robinhood App**.
 
 Profile screen is based on **Instagram**.
 
-Social Feed screen is based on **Facebook**.
+Social Feed screen is based on **Facebook** and **Instagram**.
 
 ### Other design ideas
 
@@ -59,7 +63,7 @@ Social Feed screen is based on **Facebook**.
 - [Instagram UI kit - Sketch file](https://www.sketchappsources.com/free-source/2023-instagram-based-ui-kit-sketch-freebie-resource.html)
 
 
-## Assignment #1
+## Milestone #1
 
 ### Objectives
 
@@ -96,16 +100,13 @@ Social Feed screen is based on **Facebook**.
   <img src="screenshots/SignupInput.png" width="270" />
   <img src="screenshots/SignUpSuccess.png" width="270" />
 </div>
-<!-- <div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/profile_screen.png" width="250" />
-</div> -->
 <div style={{display: flex; flex-direction: row}}>
   <img src="screenshots/SocialFeed1.png" width="270" />
   <img src="screenshots/SocialFeed2.png" width="270" />
   <img src="screenshots/SocialFeed3.png" width="270" />
 </div>
 
-## Assignment #2
+## Milestone #2
 
 ### Objectives
 
@@ -137,7 +138,7 @@ Social Feed screen is based on **Facebook**.
 ![assignment_2](https://github.com/jkhusanov/daug-mobile/blob/master/screenshots/demo-app.gif)
 
 
-## Assignment #3
+## Milestone #3
 
 ### Objectives
 
@@ -251,14 +252,7 @@ router.post('api/posts/:postId/uncomment/:userId'); // DELETE
 
 ### Demo
 
-## Submission
 
-Once you have completed each assignment above, please create a new issue on this repo with the title as your name and add the link to your repo in the description. Additionally please publish your Expo app and add the link as a comment on your submission issue. One of the TA's will review your code and add your name to the list of completed submissions below if all looks good.
+## Feedback
 
-## Problems?
-
-In case you run into any problems or issues, please post it on #questions channel on the MobileSpace Slack.
-
-## Finally
-
-For any other questions about this repo or MobileSpace in general please reach out to [**@jkhusanov**](https://github.com/jkhusanov) on Github.
+In case you have any feedback or questions, feel free to open a new issues on this repo or reach out to me [**@jkhusanov**](https://github.com/jkhusanov) on Github.
