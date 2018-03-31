@@ -1,3 +1,17 @@
+<p align="center">
+  <a href="https://github.com/jkhusanov/daug-mobile/">
+    <img alt="daug" src="https://github.com/jkhusanov/daug-mobile/blob/master/assets/daug_logo.png" width="450">
+  </a>
+</p>
+
+<h3 align="center">
+  Daug mobile app
+</h3>
+
+<p align="center">
+  Daug is a social network for pets.
+</p>
+
 # Daug mobile app
 
 This repo is the mobile app for Daug.
