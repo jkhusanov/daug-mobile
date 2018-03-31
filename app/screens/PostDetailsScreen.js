@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, KeyboardAvoidingView, ActivityIndicator, Alert } from 'react-native';
 import { Button, Icon, Input } from 'react-native-elements';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 
 import { ENV_URL, getUserId } from '../utils/auth';
 
@@ -232,9 +233,20 @@ export default class PostDetailsScreen extends React.Component {
             placeholder="Enter a comment"
             placeholderTextColor="gray"
             inputStyle={{ color: 'black', fontSize: 14 }}
+            returnKeyType="send"
             onSubmitEditing={() => {
               this.postComment()
             }}
+            rightIcon={
+              <FontAwesome
+                name='paper-plane-o'
+                size={24}
+                color='#2F80ED'
+                onPress={() => {
+                  this.postComment()
+                }}
+              />
+            }
           />
         </View>
       </View>
