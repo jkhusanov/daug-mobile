@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/jkhusanov/daug-mobile/">
-    <img alt="daug" src="https://github.com/jkhusanov/daug-mobile/blob/master/assets/daug_logo.png" width="450">
+    <img alt="daug" src="https://github.com/jkhusanov/daug-mobile/blob/master/assets/daug_logo.png" width="250">
   </a>
 </p>
 
