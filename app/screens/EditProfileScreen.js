@@ -1,30 +1,36 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, SafeAreaView, KeyboardAvoidingView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, SafeAreaView, KeyboardAvoidingView, Alert, DeviceEventEmitter, ImageEditor } from 'react-native';
 import { Button, Input, Header } from 'react-native-elements'
+import { ImagePicker, } from 'expo';
+import Modal from 'react-native-modal';
+import { RNS3 } from 'react-native-aws3';
+
 import { onSignOut } from "../utils/auth";
+import { ENV_URL } from '../utils/auth';
 
-
-import AVATAR from '../../assets/profile/avatar.jpeg';
 
 export default class EditProfileScreen extends React.Component {
   constructor(props) {
     super(props);
+    const profile = props.navigation.state.params && props.navigation.state.params.profile
+
     this.state = {
       isLoading: false,
-      name: 'Jahon',
-      bio: 'Hello World!'
+      visibleModal: null,
+
+      ...profile
     };
   }
-  
   async DoneEditingPressed() {
     this.setState({ isLoading: true })
 
-    const { name, bio, email, password, profileImage, bannerImage } = this.state
+    const { name, bio, email, password, profile_image, bannerImage } = this.state
     const { navigate } = this.props.navigation
 
     var details = {
       'name': name,
       'bio': bio,
+      'profile_image': profile_image
     };
 
     var formBody = [];
@@ -39,7 +45,7 @@ export default class EditProfileScreen extends React.Component {
     formBody = formBody.join("&");
 
     try {
-      let response = await fetch(`https://daug-app.herokuapp.com/api/users/6`, {
+      let response = await fetch(`${ENV_URL}/api/users/${this.state.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -53,15 +59,19 @@ export default class EditProfileScreen extends React.Component {
         responseJSON = await response.json();
         console.log(responseJSON)
 
-        this.setState({ 
-          isLoading: false, 
-          profile: responseJSON, 
+        this.setState({
+          isLoading: false,
         })
         Alert.alert(
           'Success!',
           'Your profile is updated!',
           [
-            { text: "Continue", onPress: () => this.props.navigation.goBack() }
+            {
+              text: "Continue", onPress: () => {
+                DeviceEventEmitter.emit('user_profile_updated', {})
+                this.props.navigation.goBack()
+              }
+            }
           ],
           { cancelable: false }
         )
@@ -82,15 +92,134 @@ export default class EditProfileScreen extends React.Component {
       Alert.alert('Updating failed!', 'Unable to Post. Please try again later')
     }
   }
-  _renderProfileName(name) {
-    if (name) {
-      return (
-        <Text>{name}</Text>
-      )
+  takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    if (result.cancelled) {
+      console.log('Take Photo Canceled');
+      return;
     }
+
+    let resizedUri = await new Promise((resolve, reject) => {
+      ImageEditor.cropImage(result.uri,
+        {
+          offset: { x: 0, y: 0 },
+          size: { width: result.width, height: result.height },
+          displaySize: { width: result.width, height: result.height },
+          resizeMode: 'contain',
+        },
+        (uri) => resolve(uri),
+        () => reject(),
+      );
+    });
+
+    // this gives you a rct-image-store URI or a base64 image tag that
+    // you can use from ImageStore
+
+    const file = {
+      // `uri` can also be a file system path (i.e. file://)
+      uri: resizedUri,
+      name: `user_${this.state.id}_profile_image_${new Date().getTime()}.png`,
+      type: "image/png"
+    }
+
+    const options = {
+      keyPrefix: "uploads/",
+      bucket: "daug",
+      region: "us-east-1",
+      accessKey: "AKIAIKG2UJ7AHBKJ5N2Q",
+      secretKey: "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",
+      successActionStatus: 201
+    }
+
+    RNS3.put(file, options).then(response => {
+      if (response.status !== 201)
+        throw new Error("Failed to upload image to S3");
+
+      console.log(response.body);
+
+      this.setState({ profile_image: response.body.postResponse.location });
+    });
   }
+  pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+
+    if (result.cancelled) {
+      console.log('Profile Image cancelled');
+      return;
+    }
+
+    let resizedUri = await new Promise((resolve, reject) => {
+      ImageEditor.cropImage(result.uri,
+        {
+          offset: { x: 0, y: 0 },
+          size: { width: result.width, height: result.height },
+          displaySize: { width: result.width, height: result.height },
+          resizeMode: 'contain',
+        },
+        (uri) => resolve(uri),
+        () => reject(),
+      );
+    });
+
+    // this gives you a rct-image-store URI or a base64 image tag that
+    // you can use from ImageStore
+
+    const file = {
+      // `uri` can also be a file system path (i.e. file://)
+      uri: resizedUri,
+      name: `user_${this.state.id}_profile_image_${new Date().getTime()}.png`,
+      type: "image/png"
+    }
+
+    const options = {
+      keyPrefix: "uploads/",
+      bucket: "daug",
+      region: "us-east-1",
+      accessKey: "AKIAIKG2UJ7AHBKJ5N2Q",
+      secretKey: "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",
+      successActionStatus: 201
+    }
+
+    RNS3.put(file, options).then(response => {
+      if (response.status !== 201)
+        throw new Error("Failed to upload image to S3");
+
+      console.log(response.body);
+
+      this.setState({ profile_image: response.body.postResponse.location });
+    });
+  };
+  _renderButton = (text, onPress) => (
+    <TouchableOpacity onPress={onPress}>
+      <View style={styles.avatarChangeButtonContainer}>
+        <Text style={styles.avatarChangeButton}>{text}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+  _renderModalContent = () => (
+    <View style={styles.modalContent}>
+      <View style={styles.avatarChangeOptions}>
+        <TouchableOpacity onPress={() => { this.takePhoto(), this.setState({ visibleModal: null }) }}>
+          <Text style={styles.avatarChangeButton}>Take Photo</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.avatarChangeOptions}>
+        <TouchableOpacity onPress={() => { this.pickImage(), this.setState({ visibleModal: null }) }}>
+          <Text style={styles.avatarChangeButton}>Choose from Library</Text>
+        </TouchableOpacity>
+      </View>
+      {this._renderButton('Cancel', () => this.setState({ visibleModal: null }))}
+    </View>
+  );
   render() {
-    const { name, email, password, bio, isLoading, profile } = this.state
+    const { name, email, password, bio, isLoading, profile, profile_image } = this.state
     return (
       <View style={styles.profileEditContainer}>
         <SafeAreaView style={{ backgroundColor: '#FAFAFA', }}>
@@ -124,13 +253,16 @@ export default class EditProfileScreen extends React.Component {
                     <View style={styles.avatarContainer}>
                       <Image
                         style={styles.avatarImage}
-                        source={AVATAR}
+                        source={{ uri: profile_image || '' }}
                       />
                     </View>
                     <View style={styles.avatarChangeButtonContainer}>
-                      <TouchableOpacity>
-                        <Text style={styles.avatarChangeButton}>Change Photo</Text>
-                      </TouchableOpacity>
+                      {this._renderButton('Choose Photo', () => this.setState({ visibleModal: 1 }))}
+                      <Modal isVisible={this.state.visibleModal === 1}>
+                        {this._renderModalContent()}
+                      </Modal>
+
+
                     </View>
                   </View>
                   <View style={styles.detailsChangeContainer}>
@@ -172,14 +304,14 @@ export default class EditProfileScreen extends React.Component {
                   <Text style={styles.privateInfoLabel}>Private Information</Text>
                 </View>
                 <View style={styles.profileLogoutContainer}>
-                <Button
-                  text='Logout'
-                  onPress={() => onSignOut().then(() => this.props.navigation.navigate('Intro'))}
-                  textStyle={styles.profileLogoutButtonText}
-                  buttonStyle={styles.profileLogoutButton}
-                >
-                </Button>
-              </View>
+                  <Button
+                    text='Logout'
+                    onPress={() => onSignOut().then(() => this.props.navigation.navigate('Intro'))}
+                    textStyle={styles.profileLogoutButtonText}
+                    buttonStyle={styles.profileLogoutButton}
+                  >
+                  </Button>
+                </View>
               </View>
             </KeyboardAvoidingView>
           }
@@ -225,6 +357,7 @@ const styles = StyleSheet.create({
     color: '#2F80ED',
     fontSize: 18,
     fontWeight: 'bold',
+
   },
   detailsChangeContainer: {
     marginBottom: 10,
@@ -280,5 +413,19 @@ const styles = StyleSheet.create({
     width: 170,
     height: 40,
     borderRadius: 0,
+  },
+  avatarChangeOptions: {
+    borderBottomWidth: 1,
+    borderColor: '#aaaaaa'
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderRadius: 4,
+    borderColor: 'rgba(0, 0, 0, 0.1)',
+
   },
 });

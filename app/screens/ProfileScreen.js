@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, DeviceEventEmitter, Alert, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, DeviceEventEmitter, Alert, FlatList, Dimensions, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-elements'
 import { ENV_URL, getUserId } from '../utils/auth';
 
@@ -216,6 +216,7 @@ export default class ProfileScreen extends React.Component {
       )
     }
   }
+  //displaying posts 
   displayPost(post, index) {
     const { navigate } = this.props.navigation
 
@@ -231,6 +232,7 @@ export default class ProfileScreen extends React.Component {
     )
   }
 
+  //loading posts and rendering them with displayPost
   renderPosts() {
     const { posts } = this.state.profile
 
@@ -244,7 +246,15 @@ export default class ProfileScreen extends React.Component {
       </View>
     )
   }
-  render() {
+  //loading circle 
+  loadingView() {
+    return (
+      <View style={styles.loadingView}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
+  renderContentView() {
     const { isProfileLoading, profile, isHeaderShow } = this.state;
     return (
       <ScrollView style={{ backgroundColor: '#fff' }}>
@@ -305,6 +315,13 @@ export default class ProfileScreen extends React.Component {
           </View>
         }
       </ScrollView>
+    );
+  }
+  render() {
+    const { user, isHeaderShow, fontLoaded, isProfileLoading } = this.state
+
+    return (
+      isProfileLoading || user === null ? this.loadingView() : this.renderContentView()
     );
   }
 }
@@ -448,7 +465,12 @@ const styles = StyleSheet.create({
   },
   postImage: {
     flex: 1
-  }
+  },
+  loadingView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
 
 
 });
