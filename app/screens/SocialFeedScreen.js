@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableHighlight, TouchableOpacity, Image, ScrollView, StatusBar, Alert } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableHighlight, TouchableOpacity, Image, ScrollView, StatusBar, Alert, DeviceEventEmitter, ActivityIndicator } from 'react-native';
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { Button, Icon } from 'react-native-elements';
 import { Provider } from 'react-redux'
@@ -20,7 +20,7 @@ export default class SocialFeedScreen extends React.Component {
     super(props);
     this.state = {
       liked: false,
-      isFeedLoading: true,
+      isLoading: false,
       posts: null,
       postId: null,
     };
@@ -41,6 +41,7 @@ export default class SocialFeedScreen extends React.Component {
   }
   //Getting feed
   async getFeed() {
+    this.setState({ isLoading: true });
     const { postId } = this.state
     try {
       let response = await fetch(`${ENV_URL}/api/feed`, {
@@ -57,7 +58,7 @@ export default class SocialFeedScreen extends React.Component {
         responseJSON = await response.json();
         console.log(responseJSON)
         this.setState({
-          isFeedLoading: false,
+          isLoading: false,
           posts: responseJSON,
         })
       } else {
@@ -70,7 +71,7 @@ export default class SocialFeedScreen extends React.Component {
         Alert.alert('Unable to get your feed', `Reason.. ${error}!`)
       }
     } catch (error) {
-      this.setState({ isLoading: false, response: error })
+      this.setState({ response: error })
 
       console.log(error)
 
@@ -156,6 +157,20 @@ export default class SocialFeedScreen extends React.Component {
       Alert.alert('1.2 Unable to like post! ', `${error}`)
     }
   }
+  //Used to refresh screen if user information is changed in EditProfile
+  componentWillMount() {
+    DeviceEventEmitter.addListener('new_post_created', (e) => {
+      this.getFeed()
+    })
+  }
+
+  loadingView() {
+    return (
+      <View style={styles.loadingView}>
+        <ActivityIndicator size="large" />
+      </View>
+    )
+  }
   // Posting new unlike
   async postUnLike(postId) {
     const { user } = this.state
@@ -239,7 +254,7 @@ export default class SocialFeedScreen extends React.Component {
   }
 
   _renderMembers(member) {
-    const { isFeedLoading, user, liked, } = this.state;
+    const { user, liked, } = this.state;
 
     return (
       <View>
@@ -250,8 +265,8 @@ export default class SocialFeedScreen extends React.Component {
         <View style={styles.membersRowContainer} key={member}>
           <View style={styles.postInfoTopContainer}>
             <View style={styles.postAuthorAvatarContainer}>
-              <TouchableOpacity 
-                onPress={() => this.props.navigation.navigate('Profile', ( member.user.id == this.state.userId) ? { isHeaderShow: false, userId: member.user.id } : { isHeaderShow: true, userId: member.user.id } )}
+              <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Profile', (member.user.id == this.state.userId) ? { isHeaderShow: false, userId: member.user.id } : { isHeaderShow: true, userId: member.user.id })}
               >
                 {this._renderProfileImage(member.user["profile_image"])}
               </TouchableOpacity>
@@ -259,7 +274,7 @@ export default class SocialFeedScreen extends React.Component {
             <View style={styles.postAuthorInfoContainer}>
               <View style={styles.nameContainer}>
                 <TouchableOpacity
-                  onPress={() => this.props.navigation.navigate('Profile', ( member.user.id == this.state.userId) ? { isHeaderShow: false, userId: member.user.id } : { isHeaderShow: true, userId: member.user.id } )}
+                  onPress={() => this.props.navigation.navigate('Profile', (member.user.id == this.state.userId) ? { isHeaderShow: false, userId: member.user.id } : { isHeaderShow: true, userId: member.user.id })}
                 >
                   <Text style={styles.nameLabel}>{member.user.name}</Text>
                 </TouchableOpacity>
@@ -325,23 +340,23 @@ export default class SocialFeedScreen extends React.Component {
     )
   }
   renderList() {
-    const { isFeedLoading, posts, user } = this.state;
+    const { isLoading, posts, } = this.state
     return (
       <View style={styles.flatListContainer}>
-        {!isFeedLoading &&
 
           <FlatList
             data={posts}
             extraData={this.state}
             keyExtractor={(item, index) => index}
             renderItem={({ item }) => this._renderMembers(item)}
+            onRefresh={() => this.getFeed()}
+            refreshing={isLoading}
           />
-        }
       </View>
     )
   }
   render() {
-    const { isFeedLoading, user, postId, posts } = this.state;
+    const { isLoading, user, postId, posts } = this.state;
 
     return (
       <View style={styles.container}>
@@ -359,7 +374,7 @@ export default class SocialFeedScreen extends React.Component {
               />
             </TouchableOpacity>
           </View>
-          {this.renderList()}
+          {isLoading ? this.loadingView() : this.renderList()}
         </ScrollView>
       </View>
     );
@@ -377,7 +392,6 @@ const styles = StyleSheet.create({
   },
   flatListContainer: {
     justifyContent: 'center',
-    marginBottom: 50
   },
   avatar: {
     height: 45,
@@ -493,7 +507,11 @@ const styles = StyleSheet.create({
     borderColor: '#aaaaaa',
     borderWidth: 1,
     backgroundColor: 'white'
-    
+  },
+  loadingView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
 
 

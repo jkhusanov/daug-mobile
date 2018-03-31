@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, Image, SafeAreaView, KeyboardAvoidingView, Keyboard, Alert, ImageEditor } from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableOpacity, Image, SafeAreaView, KeyboardAvoidingView, Keyboard, Alert, ImageEditor, DeviceEventEmitter } from 'react-native';
 import { Button, Icon, Header } from 'react-native-elements';
 import { Entypo, Ionicons } from '@expo/vector-icons';
 import { ImagePicker } from 'expo';
@@ -78,7 +78,11 @@ export default class CreatePostScreen extends React.Component {
           'Success!',
           'Your post is created and posted!',
           [
-            { text: "Continue", onPress: () => this.props.navigation.goBack() }
+            { text: "Continue", onPress: () => {
+              DeviceEventEmitter.emit('new_post_created', {})
+              this.props.navigation.goBack()
+              }
+            }
           ],
           { cancelable: false }
         )
