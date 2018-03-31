@@ -21,7 +21,27 @@
 - Your pets can **sign up or login** using their paws.
 - They can **upload selfies** or **post their thoughts** for other pets to see.
 - They can also look at **other pets posts** and either **paw** (like) or just dislike it.
+
+### Demo and some screenshots
+
 ![daug_demo](https://github.com/jkhusanov/daug-mobile/blob/master/screenshots/demo-app-final.gif)
+
+
+<div style={{display: flex; flex-direction: row}}>
+  <img src="screenshots/final/intro.png" width="270" />
+  <img src="screenshots/final/signup.png" width="270" />
+  <img src="screenshots/final/login.png" width="270" />
+</div>
+<div style={{display: flex; flex-direction: row}}>
+  <img src="screenshots/final/feed.png" width="270" />
+  <img src="screenshots/final/post.png" width="270" />
+  <img src="screenshots/final/create.png" width="270" />
+</div>
+<div style={{display: flex; flex-direction: row}}>
+  <img src="screenshots/final/follow.png" width="270" />
+  <img src="screenshots/final/profile.png" width="270" />
+  <img src="screenshots/final/edit.png" width="270" />
+</div>
 
 ## Functionality
 - Daug is a fully functioning Social Network app
