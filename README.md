@@ -12,9 +12,7 @@
   Daug is a social network for pets.
 </p>
 
-# Daug mobile app
-
-This repo is the mobile app for Daug.
+### [Demo - Try it on Expo](https://exp.host/@jkhusanov/daug-mobile)
 
 ## What's Daug?
 
@@ -24,12 +22,22 @@ This repo is the mobile app for Daug.
 - They can **upload selfies** or **post their thoughts** for other pets to see.
 - They can also look at **other pets posts** and either **paw** (like) or **scratch** (dislike) it.
 
-### [Demo - Try it on Expo](https://exp.host/@jkhusanov/daug-mobile)
+## Functionality
+- Daug is a fully functioning Social Network app
+- Users can Sign up & Log into the app
+- Users can create a new Posts
+- Users can like and comments on Posts
+- Users can follow each other
+
+
+Used React Native Camera library to let the users take pictures while creating posts or upload a new profile picture. Also used React Native Elements library to build UI, React Navigation library to handle navigation, and packages such as react-native-modal and react-native-keyboard-aware-scroll-view to improve UI. 
+
+Would like to implement Redux in the future to better manage the state. Also would like to add themeing to the app to enable light/dark modes, and overall make the app more dynamic and functional.
 
 ## Getting started
 
 ```
-git clone git@github.com:mobilespace/daug-mobile.git
+git clone https://github.com/jkhusanov/daug-mobile.git
 
 exp start
 
