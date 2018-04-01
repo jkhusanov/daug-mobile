@@ -100,26 +100,6 @@ Below you can see my main milestones and how I achieved them
 - [x] Design & build an Social Feed Screen with [Mock Data](https://raw.githubusercontent.com/mobilespace/daug-mobile/c4d4a331564ee490e1162f3733f3023afe3defc3/app/utils/constants.js)
 - [x] Attach screenshots/gif of screens to `README.MD`
 
-### Screenshots
-
-<div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/Intro.png" width="270" />
-</div>
-<div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/Login.png" width="270" />
-  <img src="screenshots/LoginInput.png" width="270" />
-  <img src="screenshots/LoginSuccess.png" width="270" />
-</div>
-<div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/Signup.png" width="270" />
-  <img src="screenshots/SignupInput.png" width="270" />
-  <img src="screenshots/SignUpSuccess.png" width="270" />
-</div>
-<div style={{display: flex; flex-direction: row}}>
-  <img src="screenshots/SocialFeed1.png" width="270" />
-  <img src="screenshots/SocialFeed2.png" width="270" />
-  <img src="screenshots/SocialFeed3.png" width="270" />
-</div>
 
 ## Milestone #2
 
@@ -148,10 +128,6 @@ Below you can see my main milestones and how I achieved them
 - [x] Add working gif of app to `README.MD`
 
 
-### Demo
-
-![assignment_2](https://github.com/jkhusanov/daug-mobile/blob/master/screenshots/demo-app.gif)
-
 
 ## Milestone #3
 
@@ -163,65 +139,6 @@ Below you can see my main milestones and how I achieved them
 
 #### URL: [https://daug-app.herokuapp.com](https://daug-app.herokuapp.com)
 
-### API
-
-- `/api` => `GET` => Used to check API endpoint status
-  	- `/users/all` => `GET` => Lists of all users
-  	- `/posts/all` => `GET` => Lists of all posts
-  	- `/users/:userId` => `GET` => Returns a user
-  	- `/users/:userId` => `PUT` => Updates a user
-  	- `/posts/:postId` => `GET` => Returns a post
-  	- `/posts/:postId` => `POST` => Creates a post
-  	- `/posts/:postId` => `PUT` => Updates a post
-  	- `/posts/:postId` => `DELETE` => Deletes a post
-  	- `/feed` => `GET` => Returns the Social Feed
-- `/auth` => `GET` => Used to check AUTH endpoint status
-  - `/signup` => `POST` = `( name, email, password )` => Used to create a new user
-  - `/login` => `POST` = `( email, password )` => Used to validate an existing user
-
-```
-**Namespace:** `/auth`
-
-// User Authentication endpoints
-router.post('auth/signup'); // CREATE
-router.post('auth/login'); // VALIDATE / READ
-
-
-**Namespace:** `/api`
-
-// All data endpoints
-router.get('api/users/all'); // READ
-router.get('api/posts/all'); // READ
-
-// Social Feed endpoints
-router.get('api/feed'); // READ
-
-// User data endpoints
-router.get('api/users/:userId'); // READ
-router.put('api/users/:userId'); // UPDATE
-
-// Posts endpoints
-router.get('api/posts/:postId'); // READ
-router.post('api/users/:userId/posts'); // CREATE
-router.put('api/users/:userId/posts/:postId'); // UPDATE
-router.delete('api/users/:userId/posts/:postId'); // DELETE
-
-// Follower endpoints
-router.get('api/users/:userId/followers'); // READ
-router.get('api/users/:userId/following'); // READ
-router.post('api/users/:userId/follow/:followingId'); // CREATE
-router.post('api/users/:userId/unfollow/:followingId'); // DELETE
-
-// Like endpoints
-router.get('api/posts/:postId/likes'); // READ
-router.post('api/posts/:postId/like/:userId'); // CREATE
-router.post('api/posts/:postId/unlike/:userId'); // DELETE
-
-// Comment endpoints
-router.get('api/posts/:postId/comments'); // READ
-router.post('api/posts/:postId/comment/:userId'); // CREATE
-router.post('api/posts/:postId/uncomment/:userId'); // DELETE
-```
 ### TODO
 
 - [x] Intro Screen - Make simple **`GET`** request to **`/api`** to check server status
@@ -243,9 +160,6 @@ router.post('api/posts/:postId/uncomment/:userId'); // DELETE
 - [x] Setup Authentication flow for app using `AsyncStorage`. Once the user has logged in then take them to home page each time they open the app again
 - [x] Add working gif of app to `README.MD`
 
-### Demo
-
-![assignment_2](https://github.com/jkhusanov/daug-mobile/blob/master/screenshots/demo-app-API.gif)
 
 ## Wrap up
 
@@ -264,8 +178,6 @@ router.post('api/posts/:postId/uncomment/:userId'); // DELETE
 - [x] :star: **Bonus:** Add Camera functionality to Create Post screen
 - [ ] :star: **Bonus:** Use Redux to share state between tab bar & screens
 - [x] Add working gif of app to `README.MD`
-
-### Demo
 
 
 ## Feedback
