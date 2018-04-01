@@ -65,10 +65,6 @@ exp start
 exp ios
 ```
 
-## Milestones
-
-Below you can see my main milestones and how I achieved them
-
 ## Designs
 
 Intro, Login & Sign Up screens are based on **Robinhood App**.
@@ -77,11 +73,9 @@ Profile screen is based on **Instagram**.
 
 Social Feed screen is based on **Facebook** and **Instagram**.
 
-### Other design ideas
+## Milestones
 
-- [Login screen designs on Pinterest](https://www.pinterest.com/timoa/mobile-ui-logins/?lp=true)
-- [Mobile UI on Dribble](https://dribbble.com/search?q=mobile+UI)
-- [Instagram UI kit - Sketch file](https://www.sketchappsources.com/free-source/2023-instagram-based-ui-kit-sketch-freebie-resource.html)
+Below you can see my main milestones and how I achieved them
 
 
 ## Milestone #1
