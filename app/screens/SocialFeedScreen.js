@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableHighlight, TouchableOpacity, Image, ScrollView, StatusBar, Alert, DeviceEventEmitter, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableHighlight, TouchableOpacity, Image, ScrollView, StatusBar, Alert, DeviceEventEmitter, ActivityIndicator, RefreshControl } from 'react-native';
 import { FontAwesome, SimpleLineIcons } from '@expo/vector-icons';
 import { Button, Icon } from 'react-native-elements';
 import { Provider } from 'react-redux'
@@ -360,7 +360,12 @@ export default class SocialFeedScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView  
+        refreshControl={
+          <RefreshControl
+            refreshing={isLoading}
+            onRefresh={() => this.getFeed()}
+        />}>
           <View style={styles.createPostContainer}>
             <TouchableOpacity onPress={() => this.props.navigation.navigate('CreatePost', { member: user })}>
               <Text style={styles.createPostLabel}>Create Post</Text>
