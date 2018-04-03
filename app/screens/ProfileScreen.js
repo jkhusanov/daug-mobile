@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, DeviceEventEmitter, Alert, FlatList, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, DeviceEventEmitter, Alert, FlatList, Dimensions, ActivityIndicator, RefreshControl } from 'react-native';
 import { Button } from 'react-native-elements'
 import { ENV_URL, getUserId } from '../utils/auth';
 
@@ -67,7 +67,7 @@ export default class ProfileScreen extends React.Component {
     })
   }
   async getProfile() {
-    this.setState({ isLoading: true });
+    this.setState({ isProfileLoading: true });
     try {
       let response = await fetch(`${ENV_URL}/api/users/${this.state.userId}`, {
         method: 'GET',
@@ -139,12 +139,12 @@ export default class ProfileScreen extends React.Component {
 
         console.log(responseJSON)
 
-        this.setState({ isLoading: false, errors: responseJSON.errors, following: false })
+        this.setState({ isProfileLoading: false, errors: responseJSON.errors, following: false })
 
         Alert.alert('Unable to follow user ', `${error}`)
       }
     } catch (error) {
-      this.setState({ isLoading: false, error, following: false })
+      this.setState({ isProfileLoading: false, error, following: false })
 
       Alert.alert('Unable to follow user ', `${error}`)
     }
@@ -234,7 +234,7 @@ export default class ProfileScreen extends React.Component {
     return (
       <View style={styles.postsContainer}>
         {
-          posts.slice(0).reverse().map((post, index) => {
+          posts.map((post, index) => {
             return this.displayPost(post, index)
           })
         }
@@ -252,7 +252,12 @@ export default class ProfileScreen extends React.Component {
   renderContentView() {
     const { isProfileLoading, profile, isHeaderShow } = this.state;
     return (
-      <ScrollView style={{ backgroundColor: '#fff' }}>
+      <ScrollView style={{ backgroundColor: '#fff' }} 
+      refreshControl={
+        <RefreshControl
+          refreshing={isProfileLoading}
+          onRefresh={() => this.getProfile()}
+      />}>
         {!isProfileLoading &&
           <View style={styles.mainContainer}>
             <View style={styles.profileHeaderContainer}>
