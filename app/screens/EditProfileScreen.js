@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image, SafeAreaView, KeyboardAvoidingView, Alert, DeviceEventEmitter, ImageEditor } from 'react-native';
 import { Button, Input, Header } from 'react-native-elements'
-import { ImagePicker, } from 'expo';
+import { ImagePicker, Permissions } from 'expo';
 import Modal from 'react-native-modal';
 import { RNS3 } from 'react-native-aws3';
 
@@ -92,6 +92,23 @@ export default class EditProfileScreen extends React.Component {
       Alert.alert('Updating failed!', 'Unable to Post. Please try again later')
     }
   }
+  getCameraAsync = async (mediaType) => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    if (status === 'granted') {
+      return this.takePhoto();
+    } else {
+      throw new Error('Camera permission not granted');
+    }
+  }
+
+  getPhotoAsync = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === 'granted') {
+      return this._pickImage();
+    } else {
+      throw new Error('Photo permission not granted');
+    }
+  }
   takePhoto = async () => {
     let result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
@@ -144,7 +161,7 @@ export default class EditProfileScreen extends React.Component {
       this.setState({ profile_image: response.body.postResponse.location });
     });
   }
-  pickImage = async () => {
+  _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -206,12 +223,12 @@ export default class EditProfileScreen extends React.Component {
   _renderModalContent = () => (
     <View style={styles.modalContent}>
       <View style={styles.avatarChangeOptions}>
-        <TouchableOpacity onPress={() => { this.takePhoto(), this.setState({ visibleModal: null }) }}>
+        <TouchableOpacity onPress={() => { this.getCameraAsync(), this.setState({ visibleModal: null }) }}>
           <Text style={styles.avatarChangeButton}>Take Photo</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.avatarChangeOptions}>
-        <TouchableOpacity onPress={() => { this.pickImage(), this.setState({ visibleModal: null }) }}>
+        <TouchableOpacity onPress={() => { this.getPhotoAsync(), this.setState({ visibleModal: null }) }}>
           <Text style={styles.avatarChangeButton}>Choose from Library</Text>
         </TouchableOpacity>
       </View>

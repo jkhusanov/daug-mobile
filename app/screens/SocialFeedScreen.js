@@ -347,7 +347,7 @@ export default class SocialFeedScreen extends React.Component {
           <FlatList
             data={posts}
             extraData={this.state}
-            keyExtractor={(item, index) => index}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => this._renderMembers(item)}
             onRefresh={() => this.getFeed()}
             refreshing={isLoading}

@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View, TextInput, Text, TouchableOpacity, Image, SafeAreaView, KeyboardAvoidingView, Keyboard, Alert, ImageEditor, DeviceEventEmitter } from 'react-native';
 import { Button, Icon, Header } from 'react-native-elements';
 import { Entypo, Ionicons } from '@expo/vector-icons';
-import { ImagePicker } from 'expo';
+import { ImagePicker, Permissions } from 'expo';
 import { RNS3 } from 'react-native-aws3';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -101,6 +101,16 @@ export default class CreatePostScreen extends React.Component {
       console.log(error)
 
       Alert.alert('Posting failed!', 'Unable to Post. Please try again later')
+    }
+  }
+  getPhotoAsync = async () => {
+
+
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status === 'granted') {
+      return this._pickImage();
+    } else {
+      throw new Error('Camera and Photo permission not granted');
     }
   }
   _pickImage = async () => {
@@ -247,7 +257,7 @@ export default class CreatePostScreen extends React.Component {
             </View>
             <View style={styles.imageShareContainer}>
               <View style={styles.uploadImageContainer}>
-                <TouchableOpacity onPress={() => this._pickImage()}>
+                <TouchableOpacity onPress={() => this.getPhotoAsync()}>
                   <Ionicons
                     name='md-image'
                     size={45}
